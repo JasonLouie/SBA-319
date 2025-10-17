@@ -1,13 +1,10 @@
 import express from "express";
-import userController from "../controllers/users.js";
 
 const router = express.Router();
 
 router.route("/")
-    .get(userController.findAllUsers)
+    .get()
     .post();
-
-router.get("/seed", userController.reset);
 
 router.route("/:id")
     .get()
@@ -23,8 +20,8 @@ router.route("/:id/ratings/:rating_id")
     .patch()
     .delete();
 
-router.route("/:id/favorites")
+router.route("/:id/popular")
     .get();
 
-router.route("/:id/favorites/:action")
-    .patch();
+router.route("/:id/popular/genres")
+    .get();
