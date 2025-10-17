@@ -8,20 +8,23 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         immutable: true,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        minLength: 5
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true
     },
     password: {
         type: String,
-        required: true
-    },
-    favorites: {
-        type: [mongoose.Types.ObjectId],
-        default: []
+        required: true,
+        minLength: 8
     }
 });
 
-export default mongoose.model("user", userSchema, "users");
+const User = mongoose.model("user", userSchema, "users");
+export default User;

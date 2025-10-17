@@ -5,26 +5,17 @@ const router = express.Router();
 
 router.route("/")
     .get(userController.findAllUsers)
-    .post();
+    .post(userController.addUser);
 
-router.get("/seed", userController.reset);
+router.get("/seed", userController.seed);
 
 router.route("/:id")
-    .get()
-    .patch()
-    .delete();
+    .get(userController.findUserById)
+    .patch(userController.updateUser)
+    .delete(userController.deleteUser);
 
-router.route("/:id/ratings")
-    .get()
-    .post();
+router.route("/:id/reviews")
+    .get(userController.userReviews)
+    .post(userController.createReview);
 
-router.route("/:id/ratings/:rating_id")
-    .get()
-    .patch()
-    .delete();
-
-router.route("/:id/favorites")
-    .get();
-
-router.route("/:id/favorites/:action")
-    .patch();
+export default router;

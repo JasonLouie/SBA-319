@@ -29,4 +29,6 @@ const users = [
         email: "bobbybob32@yahoo.com",
         password: "SecurePass2!"
     },
-]
+];
+
+export default users;

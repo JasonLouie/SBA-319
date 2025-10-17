@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const animeSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     genres: {
         type: [String],
@@ -12,9 +13,8 @@ const animeSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: [
-            "Currently Airing",
-            "On Hiatus",
-            "Finished Airing"
+            "Ongoing",
+            "Finished"
         ],
         required: true
     },
@@ -23,7 +23,7 @@ const animeSchema = new mongoose.Schema({
         enum: [
             "TV",
             "Movie",
-            "OVA"
+            "ONA"
         ],
         required: true
     },
@@ -33,10 +33,12 @@ const animeSchema = new mongoose.Schema({
         min: 1965,
         max: 2025
     },
-    seasons: {
+    episodes: {
         type: Number,
-        default: 1
+        required: true,
+        min: 1
     }
 });
 
-export default mongoose.model("Anime", animeSchema, "anime");
+const Anime = mongoose.model("Anime", animeSchema, "anime");
+export default Anime;
