@@ -70,10 +70,22 @@ const reviews = [
     },
     {
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a7a"),
-        anime_id: 3,
+        anime_id: 4,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf606"),
         rating: 10
-    }
+    },
+    {
+        _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a7b"),
+        anime_id: 5,
+        user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf606"),
+        rating: 8
+    },
+    {
+        _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a7c"),
+        anime_id: 6,
+        user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf606"),
+        rating: 9
+    },
 ];
 
 export default reviews;

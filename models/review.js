@@ -3,12 +3,10 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
     anime_id: {
         type: Number,
-        ref: "Anime",
         required: true
     },
     user_id: {
         type: mongoose.Types.ObjectId,
-        ref: "user",
         required: true
     },
     reviewText: {
