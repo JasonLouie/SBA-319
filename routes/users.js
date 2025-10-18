@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.route("/")
     .get(userController.findAllUsers)
-    .post(userController.addUser);
+    .post(userController.createUser);
 
 router.get("/seed", userController.seed);
 

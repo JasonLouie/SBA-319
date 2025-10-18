@@ -1,10 +1,19 @@
 import Anime from "../models/anime.js";
 import Review from "../models/review.js";
+import Counter from "../models/counter.js";
 import originalAnimes from "../seed/anime.js";
 
 async function findAllAnimes(req, res) {
     try {
-        const results = await Anime.find({});
+        if (req.query.limit && isNaN(req.query.limit)) {
+            throw { message: "Limit provided is not a number" };
+        }
+        const limit = Number(req.query.limit) || 25;
+        const query = {};
+        if (req.query.userId) {
+            query._id = req.query.userId;
+        }
+        const results = await Anime.find(query).limit(limit);
         res.json(results);
     } catch (e) {
         console.log(e.message);
@@ -12,13 +21,20 @@ async function findAllAnimes(req, res) {
     }
 }
 
-async function addAnime(req, res) {
+async function createAnime(req, res) {
     try {
-        const animeDoc = await Anime.create(req.body);
+        const animeDoc = await Anime.create({
+            title: req.body.title,
+            genres: req.body.genres,
+            status: req.body.status,
+            type: req.body.type,
+            premiered: req.body.premiered,
+            episodes: req.body.episodes
+        });
         res.json(animeDoc);
     } catch (e) {
         console.log(e.message);
-        res.status(400).json({error: "Invalid body"});
+        res.status(400).json({error: "Invalid body", reason: e.message});
     }
 }
 
@@ -38,7 +54,7 @@ async function findAnimeById(req, res) {
 
 async function updateAnime(req, res) {
     try {
-        const result = await Anime.findByIdAndUpdate(req.params.id, req.body);
+        const result = await Anime.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!result) {
             res.status(404).json({error: "Anime does not exist"});
         } else {
@@ -86,18 +102,19 @@ async function createReview(req, res) {
 async function resetAnimeData(req, res) {
     try {
         const resultDelete = await Anime.deleteMany({});
+        await Counter.reset(); // Reset the counter to 8 so preceding anime will correctly auto increment
         const resultInsert = await Anime.insertMany(originalAnimes);
-        console.log({...resultDelete, ...resultInsert});
-        res.redirect("/animes");
+        // console.log({...resultDelete, ...resultInsert});
+        res.redirect("/anime");
     } catch (e) {
-        console.log(e.message)
+        console.log(e);
         res.status(400).json({error: e.message});
     }
 }
 
 export default {
     findAllAnimes,
-    addAnime,
+    createAnime,
     findAnimeById,
     updateAnime,
     deleteAnime,

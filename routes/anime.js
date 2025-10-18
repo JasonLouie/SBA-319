@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.route("/")
     .get(animeController.findAllAnimes)
-    .post(animeController.addAnime);
+    .post(animeController.createAnime);
 
 router.get("/seed", animeController.seed);
 
@@ -13,7 +13,7 @@ router.route("/:id")
     .patch(animeController.updateAnime)
     .delete(animeController.deleteAnime);
 
-router.route("/:id/ratings")
+router.route("/:id/reviews")
     .get(animeController.animeReviews)
     .post(animeController.createReview);
 

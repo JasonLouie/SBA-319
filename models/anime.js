@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
+import AutoIncrementFactory from "mongoose-sequence";
+
+const AutoIncrement = AutoIncrementFactory(mongoose);
 
 const animeSchema = new mongoose.Schema({
+    _id: {
+        type: Number
+    },
     title: {
         type: String,
         required: true,
@@ -38,7 +44,9 @@ const animeSchema = new mongoose.Schema({
         required: true,
         min: 1
     }
-});
+}, { _id: false, versionKey: false });
+
+animeSchema.plugin(AutoIncrement);
 
 const Anime = mongoose.model("Anime", animeSchema, "anime");
 export default Anime;

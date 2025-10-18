@@ -1,5 +1,6 @@
 const anime = [
     {
+        _id: 1,
         title: "One Piece",
         genres: ["Action", "Adventure", "Fantasy"],
         status: "Ongoing",
@@ -8,6 +9,7 @@ const anime = [
         episodes: 1142
     },
     {
+        _id: 2,
         title: "Black Clover",
         genres: ["Action", "Magic", "Fantasy"],
         status: "Finished",
@@ -16,6 +18,7 @@ const anime = [
         episodes: 170
     },
     {
+        _id: 3,
         title: "One Punch Man",
         genres: ["Action", "Comedy"],
         status: "Ongoing",
@@ -24,6 +27,7 @@ const anime = [
         episodes: 25
     },
     {
+        _id: 4,
         title: "Sousou no Frieren",
         genres: ["Adventure", "Drama", "Fantasy"],
         status: "Finished",
@@ -32,6 +36,7 @@ const anime = [
         episodes: 26
     },
     {
+        _id: 5,
         title: "To Be Hero X",
         genres: ["Action"],
         status: "Finished",
@@ -40,6 +45,7 @@ const anime = [
         episodes: 24
     },
     {
+        _id: 6,
         title: "Jujutsu Kaisen",
         genres: ["Action", "Supernatural"],
         status: "Finished",
@@ -48,6 +54,7 @@ const anime = [
         episodes: 47
     },
     {
+        _id: 7,
         title: "Bocchi the Rock!",
         genres: ["Comedy"],
         status: "Finished",
@@ -56,6 +63,7 @@ const anime = [
         episodes: 12
     },
     {
+        _id: 8,
         title: "Gintama: The Final",
         genres: ["Action, Comedy, Drama, Sci-Fi"],
         status: "Finished",
