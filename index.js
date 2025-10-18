@@ -19,17 +19,16 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-app.use("/users", usersRouter);
-
 // Middleware to set user_id to dev user's id for any route with reviews in it
-app.use(/reviews/, (req, res, next) => {
-    console.log(req.url);
-    if(req.method === "POST" || req.method === "PATCH" || req.method === "DELETE"){
-        req.body.userId = "68f2ff6c36ffc14fdd3fcc6d";
+// This is required because the application implementation will use forms without specifying a user_id (maybe)
+app.use("/*reviews", (req, res, next) => {
+    if(req.method === "POST" || req.method === "PATCH"){
+        req.body.user_id = req.body.user_id || "68f2ff6c36ffc14fdd3fcc6d";
     }
     next();
 });
 
+app.use("/users", usersRouter);
 app.use("/anime", animeRouter);
 app.use("/reviews", reviewsRouter);
 

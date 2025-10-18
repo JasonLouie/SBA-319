@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import Review from "../models/review.js";
 import originalUsers from "../seed/users.js";
+import mongoose from "mongoose";
 
 async function findAllUsers(req, res) {
     try {
@@ -102,7 +103,7 @@ async function resetUserData(req, res) {
 
         // Create static dev user
         const devUserData = {
-            _id: "68f2ff6c36ffc14fdd3fcc6d",
+            _id: new mongoose.Types.ObjectId("68f2ff6c36ffc14fdd3fcc6d"),
             name: "dev",
             username: "dev"
         };

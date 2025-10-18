@@ -10,8 +10,8 @@ async function findAllAnimes(req, res) {
         }
         const limit = Number(req.query.limit) || 25;
         const query = {};
-        if (req.query.userId) {
-            query._id = req.query.userId;
+        if (req.query.animeId) {
+            query._id = req.query.animeId;
         }
         const results = await Anime.find(query).limit(limit);
         res.json(results);
