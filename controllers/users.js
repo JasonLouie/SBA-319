@@ -2,7 +2,7 @@ import User from "../models/user.js";
 import Review from "../models/review.js";
 import originalUsers from "../seed/users.js";
 import mongoose from "mongoose";
-import { handleError, validateLimit } from "../functions/functions.js";
+import { formatError, validateLimit } from "../functions/functions.js";
 
 async function findAllUsers(req, res) {
     try {
@@ -16,7 +16,7 @@ async function findAllUsers(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -31,7 +31,7 @@ async function createUser(req, res) {
         res.json(userDoc);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -45,7 +45,7 @@ async function findUserById(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -59,7 +59,7 @@ async function updateUser(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -73,7 +73,7 @@ async function deleteUser(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -83,7 +83,7 @@ async function findReviewsByUserId(req, res) {
         res.json(results);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -94,7 +94,7 @@ async function createReview(req, res) {
         res.json(reviewDoc);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -114,7 +114,7 @@ async function resetUserData(req, res) {
         res.redirect("/users");
     } catch (err) {
         console.log(err.message)
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 

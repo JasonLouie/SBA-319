@@ -2,7 +2,7 @@ import Anime from "../models/anime.js";
 import Review from "../models/review.js";
 import Counter from "../models/counter.js";
 import originalAnimes from "../seed/anime.js";
-import { error, handleError, validateLimit } from "../functions/functions.js";
+import { error, formatError, validateLimit } from "../functions/functions.js";
 
 async function findAllAnimes(req, res) {
     try {
@@ -16,7 +16,7 @@ async function findAllAnimes(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -33,7 +33,7 @@ async function createAnime(req, res) {
         res.json(animeDoc);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -47,7 +47,7 @@ async function findAnimeById(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -61,7 +61,7 @@ async function updateAnime(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -75,7 +75,7 @@ async function deleteAnime(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -85,7 +85,7 @@ async function findReviewsByAnimeId(req, res) {
         res.json(results);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -96,7 +96,7 @@ async function createReview(req, res) {
         res.json(reviewDoc);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -109,7 +109,7 @@ async function resetAnimeData(req, res) {
         res.redirect("/anime");
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 

@@ -1,20 +1,25 @@
-export function handleError(err) {
+export function formatError(err) {
     if (err.name === "ValidationError") {
+        console.log("Mongoose ValidationError thrown");
         const messages = {};
         for (const key in err.errors) {
             messages[key] = err.errors[key].message;
         }
         return {errors: messages};
     } else if (err.name === "CastError") {
+        console.log("Mongoose CastError thrown");
         const messages = {};
         messages[err.path] = err.message;
         return {errors: messages};
     } else if (err.code && err.code === 11000) { // If validator fails to catch a uniqueness error from the validator, expect a MongoDB error
+        console.log("MongoDB unique error thrown");
         const field = Object.keys(err.keyValue)[0];
         return error(`${field[0].toUpperCase() + field.slice(1)} is taken`);
-    } else if (err.error) { // Custom error thrown
+    } else if (err.error || err.errors) { // Custom error thrown
+        console.log("Custom error thrown");
         return err;
     }
+    console.log("Error is not accounted for");
     return err.message;
 }
 

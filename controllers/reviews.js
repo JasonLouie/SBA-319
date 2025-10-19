@@ -3,7 +3,7 @@ import User from "../models/user.js";
 import Review from "../models/review.js";
 import originalReviews from "../seed/reviews.js";
 import Anime from "../models/anime.js";
-import { error, handleError, validateLimit, validateObject } from "../functions/functions.js";
+import { error, formatError, validateLimit } from "../functions/functions.js";
 
 async function findAllReviews(req, res) {
     try {
@@ -17,32 +17,29 @@ async function findAllReviews(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
 async function createReview(req, res) {
     try {
-        const userId = new mongoose.Types.ObjectId(String(req.body.user_id));
-        const animeId = Number(req.body.anime_id);
-
+        // Validate body first
+        validateReviewBody(req.body);
+        
         // Use promise.all to run all three queries at the same time
-        const [userDoc, animeDoc, reviewDoc] = await Promise.all([User.findById(userId), Anime.findById(animeId), Review.findOne({anime_id: animeId, user_id: userId})]);
-        const bodyValidated = validateObject(req.body, ["anime_id", "user_id", "rating"], true, ["comment"]);
-        if (req.body.rating && typeof req.body.rating != "number") {
-            res.status(400).json({errors: {rating: "Rating must be a number"}});
-        } else if (userDoc && animeDoc && !reviewDoc && bodyValidated) {
+        // Check if anime and user exist (first 2 queries), check if review already exists (3rd query)
+        const [userDoc, animeDoc, reviewDoc] = await Promise.all([User.findById(req.body.user_id), Anime.findById(req.body.anime_id), Review.findOne({anime_id: req.body.anime_id, user_id: req.body.user_id})]);
+        
+        if (userDoc && animeDoc && !reviewDoc) {
             const newReview = await Review.create({
                 anime_id: req.body.anime_id,
-                user_id: userId,
+                user_id: req.body.user_id,
                 comment: req.body.comment,
                 rating: req.body.rating
             });
             res.status(201).json(newReview);
         } else if (reviewDoc) {
             res.status(409).json(error("Review already exists"))
-        } else if (!bodyValidated) {
-            res.status(400).json(error("Invalid body"));
         } else if (!userDoc && !animeDoc) {
             res.status(404).json(error("User and Anime not found"));
         } else if (!userDoc) {
@@ -53,8 +50,8 @@ async function createReview(req, res) {
             res.status(500).json(error("Unexpected error when creating review"));
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(handleError(err));
+        console.log(err.message || err);
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -68,7 +65,7 @@ async function findReviewById(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -82,7 +79,7 @@ async function updateReview(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -96,7 +93,7 @@ async function deleteReview(req, res) {
         }
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -107,7 +104,7 @@ async function resetReviewData(req, res) {
         res.redirect("/reviews");
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
     }
 }
 
@@ -137,7 +134,27 @@ async function findReviewsByType(req, res) {
         res.json(results);
     } catch (err) {
         console.log(err.message);
-        res.status(400).json(handleError(err));
+        res.status(400).json(formatError(err));
+    }
+}
+
+export function validateReviewBody(body, type="new") {
+    const expectedKeys = type === "new" ? ["anime_id", "user_id", "rating"] : ["rating"];
+    const optionalKeys = ["comment"];
+    const keyErrors = {};
+    
+    for (const key in body) {
+        if (!expectedKeys.includes(key) && (optionalKeys.length > 0 && !optionalKeys.includes(key))) {
+            keyErrors[key] = "Invalid key detected";
+        } else if (key === "anime_id" && typeof body[key] != "number") {
+            keyErrors[key] = "Anime Id must be a number";
+        } else if (key === "rating" && typeof body[key] != "number") {
+            keyErrors[key] = "Rating must be a number";
+        }
+    }
+
+    if (Object.keys(keyErrors).length > 0) {
+        throw {errors: keyErrors};
     }
 }
 
