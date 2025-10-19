@@ -10,12 +10,20 @@ const animeSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: true,
-        unique: true
+        required: [true, "Title is required"],
+        unique: true,
+        validate: {
+            validator: function (v) {
+                return this.model("Anime").findOne({ title: v }).then(anime => !anime);
+            },
+            message: "Anime already exists"
+        },
+        cast: "Title must be a string"
     },
     genres: {
         type: [String],
-        required: true
+        required: [true, "Genres are required"],
+        cast: "Genres must be an array of at least one string"
     },
     status: {
         type: String,
@@ -24,7 +32,7 @@ const animeSchema = new mongoose.Schema({
             "Finished",
             "Not Aired"
         ],
-        required: true,
+        required: [true, "Status is required"],
         message: "{VALUE} is not a valid status for an anime"
     },
     type: {
@@ -34,20 +42,18 @@ const animeSchema = new mongoose.Schema({
             "Movie",
             "ONA"
         ],
-        required: true,
+        required: [true, "Type is required"],
         message: "{VALUE} is not a valid type of anime"
     },
     premiered: {
         type: Number,
-        required: true,
-        min: 1965,
-        message: "The year premiered must be at least 1995"
+        required: [true, "The year premiered is required"],
+        min: [1965, "The year premiered must be at least 1995"],
     },
     episodes: {
         type: Number,
         default: 0,
-        min: 0,
-        message: "The number of episodes must be at least 0"
+        min: [0, "The number of episodes must be at least 0"]
     }
 }, { _id: false, id: false, versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 
@@ -58,37 +64,39 @@ animeSchema.plugin(AutoIncrement);
 // Middleware to display the avg user rating for an anime whenever find is used
 animeSchema.post(/^find/, async function (docs, next) {
     try {
-        // Turns the result (docs) into an array if only one result is found
-        const animeDocs = Array.isArray(docs) ? docs : [docs];
-        const animeIds = animeDocs.map(doc => doc._id);
-
-        // Find avg user rating for those anime
-        const averages = await Review.aggregate([
-            {
-                $match: {
-                    anime_id: {
-                        $in: animeIds
+        if (docs) {
+            // Turns the result (docs) into an array if only one result is found
+            const animeDocs = Array.isArray(docs) ? docs : [docs];
+            const animeIds = animeDocs.map(doc => doc._id);
+    
+            // Find avg user rating for those anime
+            const averages = await Review.aggregate([
+                {
+                    $match: {
+                        anime_id: {
+                            $in: animeIds
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$anime_id",
+                        avg_user_rating: {
+                            $avg: "$rating"
+                        }
                     }
                 }
-            },
-            {
-                $group: {
-                    _id: "$anime_id",
-                    avg_user_rating: {
-                        $avg: "$rating"
-                    }
-                }
-            }
-        ]);
-        
-        // Store averages in an obj for easy access
-        const averagesObj = {};
-        averages.forEach(avg => averagesObj[avg._id] = Number(avg.avg_user_rating.toFixed(2)));
-
-        // Iterate through anime docs and set the avg_user_rating field
-        animeDocs.forEach(doc => {
-            doc.set("avg_user_rating", averagesObj[doc._id] || null, { strict: false });
-        });
+            ]);
+            
+            // Store averages in an obj for easy access
+            const averagesObj = {};
+            averages.forEach(avg => averagesObj[avg._id] = Number(avg.avg_user_rating.toFixed(2)));
+    
+            // Iterate through anime docs and set the avg_user_rating field
+            animeDocs.forEach(doc => {
+                doc.set("avg_user_rating", averagesObj[doc._id] || null, { strict: false });
+            });
+        }
         next();
     } catch (e) {
         console.log(e);

@@ -5,7 +5,7 @@ const reviews = [
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a70"),
         anime_id: 1,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf600"),
-        reviewText: "Best anime ever! Amazing plot and character development! Cant wait to see what will happen next!!",
+        comment: "Best anime ever! Amazing plot and character development! Cant wait to see what will happen next!!",
         rating: 10
     },
     {
@@ -18,7 +18,7 @@ const reviews = [
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a72"),
         anime_id: 1,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf602"),
-        reviewText: "Peak anime. Wish the earlier arcs weren't dragged out as much.",
+        comment: "Peak anime. Wish the earlier arcs weren't dragged out as much.",
         rating: 9
     },
     {
@@ -31,14 +31,14 @@ const reviews = [
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a74"),
         anime_id: 2,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf601"),
-        reviewText: "Some text here",
+        comment: "Some text here",
         rating: 8
     },
     {
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a75"),
         anime_id: 2,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf603"),
-        reviewText: "Also some text here",
+        comment: "Also some text here",
         rating: 10
     },
     {
@@ -51,21 +51,21 @@ const reviews = [
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a77"),
         anime_id: 2,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf604"),
-        reviewText: "some text here",
+        comment: "some text here",
         rating: 7
     },
     {
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a78"),
         anime_id: 3,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf600"),
-        reviewText: "Saitama is the GOAT!",
+        comment: "Saitama is the GOAT!",
         rating: 10
     },
     {
         _id: new mongoose.Types.ObjectId("68f3da3ff827bdfcbb384a79"),
         anime_id: 3,
         user_id: new mongoose.Types.ObjectId("68f3d6837b7fdd9996acf602"),
-        reviewText: "The new season's animations remind me of a powerpoint...",
+        comment: "The new season's animations remind me of a powerpoint...",
         rating: 6
     },
     {

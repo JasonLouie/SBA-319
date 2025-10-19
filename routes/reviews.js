@@ -8,8 +8,10 @@ router.route("/")
 
 router.get("/seed", reviewController.seed);
 
-// Get reviews that are at least 8/10
-// router.get("/great");
+// Get reviews that are at least 7/10 - positive
+// 4/10 to 6/10 - decent
+// below 4/10 - negative
+router.get("/rating/:type", reviewController.findReviewsByType);
 
 router.route("/:id")
     .get(reviewController.findReviewById)

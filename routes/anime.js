@@ -8,6 +8,8 @@ router.route("/")
 
 router.get("/seed", animeController.seed);
 
+// router.get("/popular", animeController.popular);
+
 router.route("/:id")
     .get(animeController.findAnimeById)
     .patch(animeController.updateAnime)
@@ -16,11 +18,5 @@ router.route("/:id")
 router.route("/:id/reviews")
     .get(animeController.animeReviews)
     .post(animeController.createReview);
-
-// router.route("/:id/popular")
-//     .get();
-
-// router.route("/:id/popular/genres")
-//     .get();
 
 export default router;

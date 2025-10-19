@@ -3,21 +3,31 @@ import mongoose from "mongoose";
 const reviewSchema = new mongoose.Schema({
     anime_id: {
         type: Number,
-        required: true
+        required: [true, "Anime Id is required"],
+        cast: "Anime Id must be a number"
     },
     user_id: {
         type: mongoose.Types.ObjectId,
-        required: true
+        required: [true, "User Id is required"],
+        cast: "The string provided for the User Id must be a 24-character hexadecimal representation of an objectid"
     },
-    reviewText: {
+    comment: {
         type: String,
-        default: ""
+        default: "",
+        cast: "Comment must be a string"
     },
     rating: {
         type: Number,
-        required: true,
-        min: 0,
-        max: 10
+        required: [true, "Rating is required"],
+        min: [0, "Rating cannot be less than 0"],
+        max: [10, "Rating cannot be greater than 10"],
+        cast: "Rating must be a number",
+        validate: {
+            validator: function (v) {
+                return Number.isInteger(v);
+            },
+            message: "Rating must be an integer"
+        }
     }
 }, { versionKey: false, timestamps: true });
 
