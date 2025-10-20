@@ -9,7 +9,7 @@ export async function getAllReviews(queryString) {
         const review = getReviewById(queryString.reviewId);
         return review;
     }
-    const limit = validateLimit(limit);
+    const limit = validateLimit(queryString.limit);
     const query = {};
 
     if (queryString.userId) {

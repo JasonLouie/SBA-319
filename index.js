@@ -19,18 +19,9 @@ app.get("/", (req, res) => {
     res.render("index");
 });
 
-// Middleware to set user_id to dev user's id for any route with reviews in it
-// This is required because the application implementation will use forms without specifying a user_id (maybe)
-app.use(/\/reviews/, (req, res, next) => {
-    if (req.method === "POST" || req.method === "PATCH") {
-        req.body.user_id = req.body.user_id || "68f2ff6c36ffc14fdd3fcc6d";
-    }
-    next();
-});
-
-app.use("/users", usersRouter);
-app.use("/anime", animeRouter);
-app.use("/reviews", reviewsRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/anime", animeRouter);
+app.use("/api/reviews", reviewsRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -54,12 +45,17 @@ app.use((err, req, res, next) => {
         console.log("Unanticipated error thrown");
     }
 
-    // Handle sending errors
-    if (Object.keys(messages).length > 0) {
-        res.status(400).json({errors: messages});
-    } else {
-        res.status(err.status || 500).json({ errors: err.message });
+    // Handle sending api errors
+    if (req.url.startsWith("/api")) {
+        if (Object.keys(messages).length > 0) {
+            res.status(400).json({errors: messages});
+        } else {
+            res.status(err.status || 500).json({ errors: err.message });
+        }
+    } else { // Handle sending demo errors
+        res.render("error", Object.keys(messages).length > 0 ? messages : err.message);
     }
+    
 });
 
 await connectDB();

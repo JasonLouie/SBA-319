@@ -8,9 +8,10 @@ export async function getAllUsers(queryString) {
         const user = getUserById(queryString.userId);
         return user;
     }
-    const limit = validateLimit(limit);
 
+    const limit = validateLimit(queryString.limit);
     const users = await User.find({}).limit(limit);
+    
     return users;
 }
 
@@ -60,7 +61,6 @@ export async function resetUsers() {
         username: "dev"
     };
     const [devResult, resultInsert] = await Promise.all([User.db.collection("users").insertOne(devUserData), await User.insertMany(originalUsers)]);
-    
     return resultInsert;
 }
 

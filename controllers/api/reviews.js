@@ -1,5 +1,6 @@
 import * as reviewService from "../../services/reviewService.js";
 
+// GET /reviews with optional query strings ?reviewId, ?userId, ?animeId, ?limit
 async function findAllReviews(req, res, next) {
     try {
         const reviews = await reviewService.getAllReviews(req.query);
@@ -9,6 +10,7 @@ async function findAllReviews(req, res, next) {
     }
 }
 
+// POST /reviews with body
 async function createNewReview(req, res, next) {
     try {
         const review = await reviewService.createReview(req.body);
@@ -18,6 +20,7 @@ async function createNewReview(req, res, next) {
     }
 }
 
+// GET /reviews/:id
 async function findReviewById(req, res, next) {
     try {
         const review = await reviewService.getReviewById(req.params.id);
@@ -27,6 +30,7 @@ async function findReviewById(req, res, next) {
     }
 }
 
+// PATCH /reviews/:id
 async function updateReview(req, res, next) {
     try {
         const updatedReview = await reviewService.modifyReview(req.params.id, reviewBody);
@@ -36,6 +40,7 @@ async function updateReview(req, res, next) {
     }
 }
 
+// DELETE /reviews/:id
 async function deleteReview(req, res, next) {
     try {
         const deletedReview = await reviewService.removeReview(req.params.id);
@@ -45,6 +50,7 @@ async function deleteReview(req, res, next) {
     }
 }
 
+// GET /reviews/seed
 async function resetReviewData(req, res, next) {
     try {
         const reviews = await reviewService.resetReviews();
@@ -54,6 +60,7 @@ async function resetReviewData(req, res, next) {
     }
 }
 
+// GET /reviews/rating/:type (type as positive, negative, decent)
 async function findReviewsByType(req, res, next) {
     try {
         const reviews = await reviewService.getReviewsByType(req.params.type, req.query);

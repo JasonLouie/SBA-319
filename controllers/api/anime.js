@@ -1,78 +1,57 @@
 import * as animeService from "../../services/animeService.js";
 import { createReview, getReviewsByAnimeId } from "../../services/reviewService.js";
 
+// GET /anime with optional query strings ?limit and/or ?animeId
 async function findAllAnimes(req, res, next) {
     try {
-        const limit = validateLimit(req.query.limit);
-        const results = req.query.animeId ? await Anime.findById(req.query.animeId) : await Anime.find({}).limit(limit);
-
-        if (req.query.animeId && !results) {
-            next(error({ anime: "Anime not found" }, 404));
-        } else {
-            res.json(results);
-        }
+        const animes = await animeService.getAllAnime(req.query);
+        res.json(animes);
     } catch (err) {
         next(err);
     }
 }
 
-async function createAnime(req, res, next) {
+// POST /anime with body
+async function createNewAnime(req, res, next) {
     try {
-        validateAnimeBody(req.body);
-        const animeDoc = await Anime.create({
-            title: req.body.title,
-            genres: req.body.genres,
-            status: req.body.status,
-            type: req.body.type,
-            premiered: req.body.premiered,
-            episodes: req.body.episodes
-        });
-        res.json(animeDoc);
+        const anime = await animeService.createAnime(req.body);
+        res.json(anime);
     } catch (err) {
         next(err);
     }
 }
 
+// GET /anime/:id
 async function findAnimeById(req, res, next) {
     try {
-        const result = await Anime.findById(req.params.id);
-        if (!result) {
-            next(error({ anime: "Anime not found" }, 404));
-        } else {
-            res.json(result);
-        }
+        const anime = await animeService.getAnimeById(req.params.id);
+        res.json(anime);
     } catch (err) {
         next(err);
     }
 }
 
+// PATCH /anime/:id
 async function updateAnime(req, res, next) {
     try {
-        validateAnimeBody(req.body);
-        const result = await Anime.findByIdAndUpdate(req.params.id, req.body, { runValidators: true, new: true });
-        if (!result) {
-            next(error({ anime: "Anime not found" }, 404));
-        } else {
-            res.json(result);
-        }
+        const anime = await animeService.modifyAnime(req.params.id, req.body);
+        res.json(anime);
     } catch (err) {
         next(err);
     }
 }
 
+// DELETE /anime/:id
 async function deleteAnime(req, res, next) {
     try {
-        const result = await Anime.findByIdAndDelete(req.params.id);
-        if (!result) {
-            next(error({ anime: "Anime not found" }, 404));
-        } else {
-            res.status(204).json(result);
-        }
+        const anime = await animeService.removeAnime(req.params.id);
+        res.json(anime);
     } catch (err) {
         next(err);
     }
 }
 
+// GET /anime/:id/reviews
 async function findReviewsByAnimeId(req, res, next) {
     try {
         const reviews = await getReviewsByAnimeId(req.params.id);
@@ -82,6 +61,7 @@ async function findReviewsByAnimeId(req, res, next) {
     }
 }
 
+// POST /anime/:id/reviews
 async function createNewReview(req, res, next) {
     try {
         req.body.anime_id = req.params.id;
@@ -92,39 +72,19 @@ async function createNewReview(req, res, next) {
     }
 }
 
+// GET /anime/seed
 async function resetAnimeData(req, res, next) {
     try {
-        const resultDelete = await Anime.deleteMany({});
-        await Counter.reset(); // Reset the counter to 8 so preceding anime will correctly auto increment
-        const resultInsert = await Anime.insertMany(originalAnimes, { new: true });
-        res.json(resultInsert);
+        const results = await animeService.resetAnimes();
+        res.json(results);
     } catch (err) {
         next(err);
     }
 }
 
-function validateAnimeBody(body) {
-    const expectedKeys = ["title", "genres", "status", "type", "premiered", "episodes"];
-    const keyErrors = {};
-
-    for (const key in body) {
-        if (!expectedKeys.includes(key)) {
-            keyErrors[key] = "Invalid key detected";
-        } else if (key === "premiered" && typeof body[key] != "number") {
-            keyErrors[key] = "Year Premiered must be a number";
-        } else if (key === "episodes" && typeof body[key] != "number") {
-            keyErrors[key] = "Episodes must be a number";
-        }
-    }
-
-    if (Object.keys(keyErrors).length > 0) {
-        throw error(keyErrors);
-    }
-}
-
 export default {
     findAllAnimes,
-    createAnime,
+    createAnime: createNewAnime,
     findAnimeById,
     updateAnime,
     deleteAnime,

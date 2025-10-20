@@ -8,7 +8,7 @@ export async function getAllAnime(queryString) {
         const anime = getAnimeById(queryString.animeId);
         return anime;
     }
-    const limit = validateLimit(limit);
+    const limit = validateLimit(queryString.limit);
 
     const animes = await Anime.find({}).limit(limit);
     return animes;
