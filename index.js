@@ -34,6 +34,7 @@ app.use("/reviews", reviewsRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
+    // Format errors
     const messages = {};
     if (err.name === "ValidationError") {
         console.log("Mongoose ValidationError thrown");
@@ -47,15 +48,17 @@ app.use((err, req, res, next) => {
         console.log("MongoDB unique error thrown");
         const field = Object.keys(err.keyValue)[0];
         messages[field] = `${field[0].toUpperCase() + field.slice(1)} is taken`;
-    } else if (err.error || err.errors) { // Custom error thrown
+    } else if (err.custom) { // Custom error thrown
         console.log("Custom error thrown");
     } else {
-        console.log("Error is not accounted for"); // 500
+        console.log("Unanticipated error thrown");
     }
-    if (Object.keys(messages).length > 0 ) {
+
+    // Handle sending errors
+    if (Object.keys(messages).length > 0) {
         res.status(400).json({errors: messages});
     } else {
-        res.status(err.status || 500).json({ error: err.message });
+        res.status(err.status || 500).json({ errors: err.message });
     }
 });
 

@@ -18,9 +18,9 @@ const userSchema = new mongoose.Schema({
         validate: {
             validator: function (v) {
                 const userModel = this.getQuery ? this.model : this.constructor;
-                const userId = this.getQuery ? this.getQuery()._id: this._id;
+                const userId = this.getQuery ? this.getQuery()._id : this._id;
 
-                return userModel.findOne({ username: v, _id: {$ne: userId} }).then(user => !user);
+                return userModel.findOne({ username: v, _id: { $ne: userId } }).then(user => !user);
             },
             message: "Username is taken"
         }
@@ -34,9 +34,9 @@ const userSchema = new mongoose.Schema({
         validate: {
             validator: function (v) {
                 const userModel = this.getQuery ? this.model : this.constructor;
-                const userId = this.getQuery ? this.getQuery()._id: this._id;
+                const userId = this.getQuery ? this.getQuery()._id : this._id;
 
-                return userModel.findOne({ email: v, _id: {$ne: userId} }).then(user => !user);
+                return userModel.findOne({ email: v, _id: { $ne: userId } }).then(user => !user);
             },
             message: "Email is taken"
         }

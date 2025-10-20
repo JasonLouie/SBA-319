@@ -5,7 +5,7 @@
  * @returns {object}
  */
 export function error(msg, status=400) {
-    return { message: msg, status: status };
+    return { message: msg, status: status, custom: true };
 }
 
 export function validateLimit(limit) {

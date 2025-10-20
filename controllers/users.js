@@ -10,7 +10,7 @@ async function findAllUsers(req, res, next) {
         const results = req.query.userId ? await User.findById(req.query.userId) : await User.find({}).limit(limit);
 
         if (req.query.userId && !results) {
-            next(error("User not found", 404));
+            next(error({user: "User not found"}, 404));
         } else {
             res.json(results);
         }
@@ -38,7 +38,7 @@ async function findUserById(req, res, next) {
     try {
         const result = await User.findById(req.params.id);
         if (!result) {
-            next(error("User not found", 404));
+            next(error({user: "User not found"}, 404));
         } else {
             res.json(result);
         }
@@ -49,11 +49,10 @@ async function findUserById(req, res, next) {
 
 async function updateUser(req, res, next) {
     try {
-        validateUserBody(req.body);
-        console.log(req.body);
+        validateUserBody(req.body, false);
         const result = await User.findByIdAndUpdate(req.params.id, req.body, {runValidators: true, new: true});
         if (!result) {
-            next(error("User not found", 404));
+            next(error({user: "User not found"}, 404));
         } else {
             res.json(result);
         }
@@ -66,7 +65,7 @@ async function deleteUser(req, res, next) {
     try {
         const result = await User.findByIdAndDelete(req.params.id);
         if (!result) {
-            next(error("User not found", 404));
+            next(error({user: "User not found"}, 404));
         } else {
             res.status(204).json(result);
         }
@@ -84,9 +83,10 @@ async function findReviewsByUserId(req, res, next) {
     }
 }
 
-async function createReview(req, res, next) {
+async function createNewReview(req, res, next) {
     try {
         req.body.user_id = req.params.id;
+        req.body.anime_id = req.params.anime_id;
         const reviewDoc = await Review.create(req.body);
         res.json(reviewDoc);
     } catch (err) {
@@ -106,8 +106,8 @@ async function resetUserData(req, res, next) {
         };
         await User.db.collection("users").insertOne(devUserData);
 
-        const resultInsert = await User.insertMany(originalUsers);
-        res.redirect("/users");
+        const resultInsert = await User.insertMany(originalUsers, {new: true});
+        res.json(resultInsert);
     } catch (err) {
         next(err);
     }
@@ -123,8 +123,11 @@ function validateUserBody(body, create = true) {
         }
     }
 
+    if (!create && body.username != undefined) {
+        keyErrors.username = "Username cannot be changed";
+    }
+
     if (Object.keys(keyErrors).length > 0) {
-        console.log(body);
         throw error(keyErrors);
     }
 }
@@ -136,6 +139,6 @@ export default {
     updateUser,
     deleteUser,
     userReviews: findReviewsByUserId,
-    createReview,
+    createReview: createNewReview,
     seed: resetUserData
 }

@@ -25,17 +25,17 @@ const animeSchema = new mongoose.Schema({
     },
     genres: {
         type: [String],
-        required: [true, "Genres are required"],
-        cast: "Genres must be an array of at least one genre",
+        required: [true, "At least one genre is required"],
+        enum: {
+            values: ["Action", "Adventure", "Award Winning", "Comedy", "Drama", "Fantasy", "Gourmet", "Horror", "Mystery", "Romance", "Sci-Fi", "Slice of Life", "Sports", "Supernatural", "Suspense", "Delinquents", "Detective", "Educational", "Gag Humor", "High Stakes Game", "Historical", "Isekai", "Magic", "Martial Arts", "Mecha", "Medical", "Military", "Music", "Mythology", "Organized Crime", "Otaku Culture", "Parody", "Performing Arts", "Pets", "Psychological", "Racing", "Reincarnation", "Samurai", "School", "Showbiz", "Space", "Strategy Game", "Super Power", "Survival", "Team Sports", "Time Travel", "Vampire", "Video Game", "Visual Arts", "Workplace", "Urban Fantasy", "Villainess"],
+            message: "{VALUE} is not a valid genre"
+        },
+        cast: "Genres must be an array of at least one valid genre",
         validate: {
             validator: function (v) {
                 return v.length > 0;
             },
-            message: "Genres must be an array of at least one genre",
-            validator: function (v) {
-                v.forEach(g => {if (typeof g != "string") return false});
-            },
-            message: "Each genre must be a string"
+            message: "Genres must be an array of at least one genre"
         }
     },
     status: {

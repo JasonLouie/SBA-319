@@ -65,7 +65,7 @@ const anime = [
     {
         _id: 8,
         title: "Gintama: The Final",
-        genres: ["Action, Comedy, Drama, Sci-Fi"],
+        genres: ["Action", "Comedy", "Drama", "Sci-Fi"],
         status: "Finished",
         type: "Movie",
         premiered: 2021,
