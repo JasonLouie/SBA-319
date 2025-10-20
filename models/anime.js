@@ -14,16 +14,29 @@ const animeSchema = new mongoose.Schema({
         unique: true,
         validate: {
             validator: function (v) {
-                return this.model("Anime").findOne({ title: v }).then(anime => !anime);
+                const animeModel = this.getQuery ? this.model : this.constructor;
+                const animeId = this.getQuery ? this.getQuery()._id: this._id;
+
+                return animeModel.findOne({ title: v, _id: {$ne: animeId} }).then(anime => !anime);
             },
-            message: "Anime already exists"
+            message: "Anime with that title already exists"
         },
         cast: "Title must be a string"
     },
     genres: {
         type: [String],
         required: [true, "Genres are required"],
-        cast: "Genres must be an array of at least one string"
+        cast: "Genres must be an array of at least one genre",
+        validate: {
+            validator: function (v) {
+                return v.length > 0;
+            },
+            message: "Genres must be an array of at least one genre",
+            validator: function (v) {
+                v.forEach(g => {if (typeof g != "string") return false});
+            },
+            message: "Each genre must be a string"
+        }
     },
     status: {
         type: String,

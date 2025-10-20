@@ -50,6 +50,7 @@ async function findUserById(req, res, next) {
 async function updateUser(req, res, next) {
     try {
         validateUserBody(req.body);
+        console.log(req.body);
         const result = await User.findByIdAndUpdate(req.params.id, req.body, {runValidators: true, new: true});
         if (!result) {
             next(error("User not found", 404));

@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
         match: [/^[a-zA-Z0-9_.]+$/, "Username can only contain letters, numbers, underscores, and periods"],
         validate: {
             validator: function (v) {
-                return this.model("user").findOne({ username: v }).then(user => !user);
+                const userModel = this.getQuery ? this.model : this.constructor;
+                const userId = this.getQuery ? this.getQuery()._id: this._id;
+
+                return userModel.findOne({ username: v, _id: {$ne: userId} }).then(user => !user);
             },
             message: "Username is taken"
         }
@@ -30,7 +33,10 @@ const userSchema = new mongoose.Schema({
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"],
         validate: {
             validator: function (v) {
-                return this.model("user").findOne({ email: v }).then(user => !user);
+                const userModel = this.getQuery ? this.model : this.constructor;
+                const userId = this.getQuery ? this.getQuery()._id: this._id;
+
+                return userModel.findOne({ email: v, _id: {$ne: userId} }).then(user => !user);
             },
             message: "Email is taken"
         }
