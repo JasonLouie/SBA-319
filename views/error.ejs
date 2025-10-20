@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-    <link rel="stylesheet" href="/styles/styles.css">
-    <script src="/scripts/script.js" defer></script>
-</head>
-<body class="dark-mode">
-    <header>
-        <nav class="">
-
-        </nav>
-    </header>
-    <main>
-
-    </main>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= pageTitle %></title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <p><%= messages %></p>
+            </div>
+        </main>
+    </body>
 </html>

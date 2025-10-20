@@ -1,0 +1,57 @@
+.anime-preview {
+    position: relative;
+    border: 2px solid orange;
+    border-radius: 8px;
+    width: 480px;
+    height: 80px;
+    margin: 12px 0;
+}
+
+body.dark-mode .anime-icon {
+    background-image: url(../images/profile-dark.png);
+}
+
+.anime-icon {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    height: 54px;
+    width: 54px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 80% auto;
+    background-image: url(./images/profile-light.png);
+}
+
+.field, .type-year-rating {
+    position: absolute;
+    left: 70px;
+}
+
+.title {
+    top: 10px;
+    font-size: 20px;
+}
+
+.type-year-rating {
+    bottom: 14px;
+    display: flex;
+    width: 100%;
+}
+
+.type {
+    width: 17%;
+}
+
+.year {
+    width: 15%;
+}
+
+.rating {
+    width: 20%;
+}
+
+.status {
+    width: 20%;
+}

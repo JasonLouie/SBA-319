@@ -1,93 +1,70 @@
-import Review from "../../models/reviewModel.js";
-import originalReviews from "../../seed/reviews.js";
-import { error, validateLimit } from "../../functions/functions.js";
-import { createReview, findReview, modifyReview, removeReview } from "../../services/reviewService.js";
+import * as reviewService from "../../services/reviewService.js";
 
+// GET /reviews with optional query strings ?reviewId, ?userId, ?animeId, ?limit
 async function findAllReviews(req, res, next) {
     try {
-        const limit = validateLimit(req.query.limit);
-        const results = req.query.reviewId ? await Review.findById(req.query.reviewId) : await Review.find({}).limit(limit);
-
-        if (req.query.reviewId && !results) {
-            next(error({ review: "Review not found" }, 404));
-        } else {
-            res.json(results);
-        }
+        const reviews = await reviewService.getAllReviews(req.query);
+        res.json(reviews);
     } catch (err) {
         next(err);
     }
 }
 
+// POST /reviews with body
 async function createNewReview(req, res, next) {
     try {
-        const review = await createReview(req.body);
+        const review = await reviewService.createReview(req.body);
         res.status(201).json(review);
     } catch (err) {
         next(err);
     }
 }
 
+// GET /reviews/:id
 async function findReviewById(req, res, next) {
     try {
-        const review = await findReview(req.params.id);
+        const review = await reviewService.getReviewById(req.params.id);
         res.json(review);
     } catch (err) {
         next(err);
     }
 }
 
+// PATCH /reviews/:id
 async function updateReview(req, res, next) {
     try {
-        const updatedReview = await modifyReview(req.params.id, reviewBody);
+        const updatedReview = await reviewService.modifyReview(req.params.id, reviewBody);
         res.json(updatedReview);
     } catch (err) {
         next(err);
     }
 }
 
+// DELETE /reviews/:id
 async function deleteReview(req, res, next) {
     try {
-        const deletedReview = await removeReview(req.params.id);
+        const deletedReview = await reviewService.removeReview(req.params.id);
         res.json(deletedReview);
     } catch (err) {
         next(err);
     }
 }
 
+// GET /reviews/seed
 async function resetReviewData(req, res, next) {
     try {
-        const resultDelete = await Review.deleteMany({});
-        const resultInsert = await Review.insertMany(originalReviews, {new: true});
-        res.json(resultInsert);
+        const reviews = await reviewService.resetReviews();
+        res.json(reviews);
     } catch (err) {
         next(err);
     }
 }
 
+// GET /reviews/rating/:type (type as positive, negative, decent)
 async function findReviewsByType(req, res, next) {
     try {
-        const limit = validateLimit(req.query.limit);
-        const query = {};
-
-        switch (req.params.type) {
-            case "positive":
-                query.rating = { $gte: 7 };
-                break;
-            case "negative":
-                query.rating = { $lt: 4 };
-                break;
-            case "decent":
-                query.rating = { $lte: 6, $gte: 4 };
-                break;
-            default:
-                throw error("Invalid rating type", 400);
-        }
-
-        if (req.query.animeId) {
-            query.anime_id = Number(req.query.animeId);
-        }
-        const results = await Review.find(query).limit(limit);
-        res.json(results);
+        const reviews = await reviewService.getReviewsByType(req.params.type, req.query);
+        res.json(reviews);
     } catch (err) {
         next(err);
     }

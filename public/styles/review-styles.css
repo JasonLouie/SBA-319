@@ -1,0 +1,32 @@
+.review-preview {
+    position: relative;
+    border: 2px solid lightskyblue;
+    border-radius: 8px;
+    width: 400px;
+    height: 80px;
+    margin: 12px 0;
+}
+
+.field, .user-rating {
+    position: absolute;
+    left: 10px;
+}
+
+.anime {
+    top: 10px;
+    font-size: 20px;
+}
+
+.user-rating {
+    bottom: 14px;
+    display: flex;
+    width: 100%;
+}
+
+.user {
+    width: 40%;
+}
+
+.rating {
+    width: 25%;
+}

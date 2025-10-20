@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= pageTitle %></title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/anime-styles.css" />
+        <script src="/scripts/script.js" defer></script>
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <div class="space-between">
+                    <h1>Anime</h1>
+                    <div class="doc-actions">
+                        <a href="/demo/anime/create">
+                            <div id="create-doc" class="align-vert">
+                                <p>+</p>
+                                <p>Create Anime</p>
+                            </div>
+                        </a>
+                        <a href="/demo/anime/reset">
+                            <div id="remove-doc" class="align-vert">
+                                <p>Reset Anime</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- For each showing each result from anime var -->
+                <a href="/anime/id">
+                    <div class="anime-preview">
+                        <div class="anime-icon"></div>
+                        <p class="title field">title</p>
+                        <div class="type-year-rating">
+                            <p class="type">type</p>
+                            <p class="year">year</p>
+                            <p class="rating">rating</p>
+                            <p class="status">status</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </body>
+</html>

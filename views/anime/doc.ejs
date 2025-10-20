@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AniReview | View Anime</title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/review-styles.css" />
+        <script src="/scripts/script.js" defer></script>
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/index">AniReview</a>
+                <a class="flex" href="/users/index">Users</a>
+                <a class="flex" href="/anime/index">Anime</a>
+                <a class="flex" href="/reviews/index">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <div id="anime-doc" class="flex">
+                    <h1 id="action-heading">View Anime</h1>
+                    <form id="form" action="/anime/:id" method="get">
+                        <label for="id">Id</label>
+                        <input type="number" name="id" id="id" value="1" disabled>
+    
+                        <label for="title">Title</label>
+                        <input type="string" name="title" id="title" value="Title" disabled>
+                        
+                        <label for="status">Status</label>
+                        <input type="string" name="status" id="status" value="Ongoing" disabled>
+                        
+                        <label for="genres">Genres</label>
+                        <input type="string" name="genres" id="genres" value="Genres" disabled>
+                        
+                        <label for="type">Type</label>
+                        <input type="string" name="type" id="type" value="TV" disabled>
+    
+                        <label for="premiered">Premiered</label>
+                        <input type="number" name="premiered" id="premiered" value="2025" disabled>
+    
+                        <label for="episodes">Episodes</label>
+                        <input type="number" name="episodes" id="episodes" value="1" disabled>
+
+                        <label for="avg-rating">Average User Rating</label>
+                        <input type="number" name="avg-rating" id="avg-rating" value="9.4" disabled>
+                        
+                        <div id="form-controls" class="flex">
+                            <a class="control-btn" href="/anime/index">Back</a>
+                            <a class="control-btn" href="/anime/id">View</a>
+                            <button class="control-btn" type="button" id="edit">Edit</button>
+                            <a class="control-btn" href="/anime/id/delete">Delete</a>
+                            <button class="control-btn hidden" type="submit" id="update">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,39 @@
+.user-preview {
+    position: relative;
+    border: 2px solid green;
+    border-radius: 8px;
+    width: 300px;
+    height: 80px;
+    margin: 12px 0;
+}
+
+body.dark-mode .profile-icon {
+    background-image: url(../images/profile-dark.png);
+}
+
+.profile-icon {
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    transform: translateY(-50%);
+    height: 48px;
+    width: 48px;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: 80% auto;
+    background-image: url(./images/profile-light.png);
+}
+
+.field {
+    position: absolute;
+    left: 60px;
+}
+
+.name {
+    top: 12px;
+    font-size: 20px;
+}
+
+.username {
+    bottom: 16px;
+}

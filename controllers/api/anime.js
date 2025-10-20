@@ -15,7 +15,7 @@ async function findAllAnimes(req, res, next) {
 async function createNewAnime(req, res, next) {
     try {
         const anime = await animeService.createAnime(req.body);
-        res.json(anime);
+        res.status(201).json(anime);
     } catch (err) {
         next(err);
     }

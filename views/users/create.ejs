@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= pageTitle %></title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/review-styles.css" />
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div id="content">
+                <div id="users-doc" class="flex">
+                    <h1 id="action-heading">View User</h1>
+                    <form id="form" action="/users/:id" method="post">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="name">
+                        
+                        <label for="username">Username</label>
+                        <input type="string" name="username" id="username">
+                        
+                        <label for="email">Email</label>
+                        <input type="string" name="email" id="email">
+
+                        <label for="password">Password</label>
+                        <input type="string" name="password" id="password">
+                        
+                        <div id="form-controls" class="flex">
+                            <a class="control-btn" href="/users/index">Back</a>
+                            <button class="control-btn" type="submit" id="create">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

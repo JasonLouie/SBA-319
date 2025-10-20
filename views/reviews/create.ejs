@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AniReview | View Review</title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/review-styles.css" />
+        <script src="/scripts/script.js" defer></script>
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/index">AniReview</a>
+                <a class="flex" href="/users/index">Users</a>
+                <a class="flex" href="/anime/index">Anime</a>
+                <a class="flex" href="/reviews/index">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <h1 id="action-heading">Create Review</h1>
+                <div id="reviews-doc">
+                    <form action="/reviews" method="post">
+                        <label for="id">Id</label>
+                        <input type="text" name="id" id="id">
+
+                        <label for="anime_id">Anime Id</label>
+                        <input type="number" name="anime_id" id="anime_id">
+                        
+                        <label for="user_id">User Id</label>
+                        <input type="string" name="user_id" id="user_id">
+                        
+                        <label for="comment">Comment</label>
+                        <textarea type="text" name="comment" id="comment" rows="10" cols="100"></textarea>
+                        
+                        <label for="rating">Rating</label>
+                        <input type="number" name="rating" id="rating">
+                        
+                        <div id="form-controls" class="flex">
+                            <a class="control-btn" href="/reviews/index">Back</a>
+                            <button class="control-btn" type="submit" id="create">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AniReview | Users</title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/user-styles.css" />
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <div class="space-between">
+                    <h1>Users</h1>
+                    <a href="/users/create">
+                        <div id="create-doc" class="align-vert">
+                            <p>+</p>
+                            <p>Create User</p>
+                        </div>
+                    </a>
+                </div>
+                <!-- For each using the users var -->
+                <a href="/users/:id">
+                    <div class="user-preview">
+                        <div class="profile-icon"></div>
+                        <p class="name field">name</p>
+                        <p class="username field">username</p>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </body>
+</html>

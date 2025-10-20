@@ -15,7 +15,7 @@ async function findAllUsers(req, res, next) {
 async function createNewUser(req, res, next) {
     try {
         const user = await userService.createUser(req.body);
-        res.json(user);
+        res.status(201).json(user);
     } catch (err) {
         next(err);
     }
@@ -67,7 +67,7 @@ async function createNewReview(req, res, next) {
         req.body.user_id = req.params.id;
         // Anime Id should be provided in the body. Otherwise proper err thrown
         const reviewDoc = await createReview(req.body);
-        res.json(reviewDoc);
+        res.status(201).json(reviewDoc);
     } catch (err) {
         next(err);
     }

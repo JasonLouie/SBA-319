@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AniReview | Reviews</title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/review-styles.css" />
+        <script src="/scripts/script.js" defer></script>
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/index">AniReview</a>
+                <a class="flex" href="/users/index">Users</a>
+                <a class="flex" href="/anime/index">Anime</a>
+                <a class="flex" href="/reviews/index">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div class="content">
+                <div class="space-between">
+                    <h1>Reviews</h1>
+                    <a href="/reviews/create">
+                        <div id="create-doc" class="align-vert">
+                            <p>+</p>
+                            <p>Create Review</p>
+                        </div>
+                    </a>
+                </div>
+                <!-- For each using reviews var -->
+                <a href="/reviews/:id">
+                    <div class="review-preview">
+                        <p class="anime field">anime name</p>
+                        <div class="user-rating">
+                            <p class="user">user's name</p>
+                            <p class="rating">rating</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </body>
+</html>

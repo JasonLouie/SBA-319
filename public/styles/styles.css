@@ -1,12 +1,163 @@
 body {
-    margin: 0;   
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1, h2, h3 {
+    margin: 0;
 }
 
 * {
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .dark-mode {
     background-color: #000000;
     color: white;
+}
+
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.align-vert {
+    display: flex;
+    align-items: center;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+nav {
+    height: 54px;
+    background-color: #242424;
+}
+
+nav a:first-child {
+    font-size: 34px;
+    font-weight: bold;
+    height: auto;
+}
+
+nav a:first-child:hover {
+    background-color: inherit;
+}
+
+nav a {
+    font-size: 21px;
+    padding: 0 10px;
+    height: inherit
+}
+
+nav a:hover {
+    background-color: #333;
+}
+
+nav h1 {
+    padding: 0 15px 0 25px;
+}
+
+section {
+    width: 80%;
+    padding-top: 10px;
+}
+
+.content {
+    padding-top: 12px;
+}
+
+.content p {
+    margin: 0;
+}
+
+label {
+    display: block;
+}
+
+input, textarea {
+    padding: 0 4px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    width: 312px;
+}
+
+input {
+    height: 30px;
+}
+
+textarea {
+    resize: none;
+    height: 200px;
+    padding: 6px;
+    font-family: inherit;
+}
+
+#form-controls {
+    margin-top: 10px;
+}
+
+.control-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: inherit;
+    margin-right: 6px;
+    border: 2px solid gray;
+    font-size: 14px;
+    background-color: white;
+    color: black !important;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.control-btn:last-child {
+    margin-right: 0;
+}
+
+.space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#create-doc {
+    border: 1px solid lawngreen;
+    border-radius: 10px;
+}
+
+#create-doc > p {
+    padding: 4px 0;
+}
+
+#create-doc > p:first-child {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 3px;
+    margin-right: 3px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#create-doc > p:last-child {
+    padding-right: 3px;
+}
+
+#users-doc, #anime-doc, #reviews-doc {
+    width: 500px;
+}
+#action-heading {
+    width: inherit;
+    text-align: center;
+    margin: 10px 0;
 }
