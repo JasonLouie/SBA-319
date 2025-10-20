@@ -2,9 +2,9 @@ import Anime from "../models/anime.js";
 import Review from "../models/review.js";
 import Counter from "../models/counter.js";
 import originalAnimes from "../seed/anime.js";
-import { error, formatError, validateLimit } from "../functions/functions.js";
+import { error, validateLimit } from "../functions/functions.js";
 
-async function findAllAnimes(req, res) {
+async function findAllAnimes(req, res, next) {
     try {
         const limit = validateLimit(req.query.limit);
         const results = req.query.animeId ? await Anime.findById(req.query.animeId) : await Anime.find({}).limit(limit);
@@ -15,12 +15,11 @@ async function findAllAnimes(req, res) {
             res.json(results);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function createAnime(req, res) {
+async function createAnime(req, res, next) {
     try {
         const animeDoc = await Anime.create({
             title: req.body.title,
@@ -32,12 +31,11 @@ async function createAnime(req, res) {
         });
         res.json(animeDoc);
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function findAnimeById(req, res) {
+async function findAnimeById(req, res, next) {
     try {
         const result = await Anime.findById(req.params.id);
         if (!result) {
@@ -46,12 +44,11 @@ async function findAnimeById(req, res) {
             res.json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function updateAnime(req, res) {
+async function updateAnime(req, res, next) {
     try {
         const result = await Anime.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!result) {
@@ -60,12 +57,11 @@ async function updateAnime(req, res) {
             res.json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function deleteAnime(req, res) {
+async function deleteAnime(req, res, next) {
     try {
         const result = await Anime.findByIdAndDelete(req.params.id);
         if (!result) {
@@ -74,33 +70,30 @@ async function deleteAnime(req, res) {
             res.status(204).json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function findReviewsByAnimeId(req, res) {
+async function findReviewsByAnimeId(req, res, next) {
     try {
         const results = await Review.find({anime_id: req.params.id});
         res.json(results);
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function createReview(req, res) {
+async function createReview(req, res, next) {
     try {
         req.body.anime_id = req.params.id;
         const reviewDoc = await Review.create(req.body);
         res.json(reviewDoc);
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function resetAnimeData(req, res) {
+async function resetAnimeData(req, res, next) {
     try {
         const resultDelete = await Anime.deleteMany({});
         await Counter.reset(); // Reset the counter to 8 so preceding anime will correctly auto increment
@@ -108,8 +101,7 @@ async function resetAnimeData(req, res) {
         // console.log({...resultDelete, ...resultInsert});
         res.redirect("/anime");
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 

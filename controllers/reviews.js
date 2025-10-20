@@ -1,27 +1,25 @@
-import mongoose from "mongoose";
 import User from "../models/user.js";
 import Review from "../models/review.js";
 import originalReviews from "../seed/reviews.js";
 import Anime from "../models/anime.js";
-import { error, formatError, validateLimit } from "../functions/functions.js";
+import { error, validateLimit } from "../functions/functions.js";
 
-async function findAllReviews(req, res) {
+async function findAllReviews(req, res, next) {
     try {
         const limit = validateLimit(req.query.limit);
         const results = req.query.reviewId ? await Review.findById(req.query.reviewId) : await Review.find({}).limit(limit);
 
         if (req.query.reviewId && !results) {
-            res.status(404).json(error("Review not found"));
+            next(error("Review not found", 404));
         } else {
             res.json(results);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function createReview(req, res) {
+async function createReview(req, res, next) {
     try {
         // Validate body first
         validateReviewBody(req.body);
@@ -39,76 +37,73 @@ async function createReview(req, res) {
             });
             res.status(201).json(newReview);
         } else if (reviewDoc) {
-            res.status(409).json(error("Review already exists"))
+            next(error("Review already exists", 409));
         } else if (!userDoc && !animeDoc) {
-            res.status(404).json(error("User and Anime not found"));
+            next(error("User and Anime not found", 404));
         } else if (!userDoc) {
-            res.status(404).json(error("User not found"));
-        } else if (!animeDoc){ // Anime doc is null
-            res.status(404).json(error("Anime not found"));
+            next(error("User not found", 404));
+        } else if (!animeDoc){
+            next(error("Anime not found", 404));
         } else {
-            res.status(500).json(error("Unexpected error when creating review"));
+            next(error("Unexpected error when creating review", 500));
         }
     } catch (err) {
-        console.log(err.message || err);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function findReviewById(req, res) {
+async function findReviewById(req, res, next) {
     try {
         const result = await Review.findById(req.params.id);
         if (!result) {
-            res.status(404).json(error("Review not found"));
+            next(error("Review not found"), 404);
         } else {
             res.json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function updateReview(req, res) {
+async function updateReview(req, res, next) {
     try {
+        // Validate body first
+        validateReviewBody(req.body, false);
         const result = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!result) {
-            res.status(404).json(error("Review not found"));
+            next(error("Review not found", 404));
         } else {
             res.json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function deleteReview(req, res) {
+async function deleteReview(req, res, next) {
     try {
         const result = await Review.findByIdAndDelete(req.params.id);
         if (!result) {
-            res.status(404).json(error("Review not found"));
+            next(error("Review not found", 404));
         } else {
             res.status(204).json(result);
         }
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function resetReviewData(req, res) {
+async function resetReviewData(req, res, next) {
     try {
         const resultDelete = await Review.deleteMany({});
         const resultInsert = await Review.insertMany(originalReviews);
         res.redirect("/reviews");
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-async function findReviewsByType(req, res) {
+async function findReviewsByType(req, res, next) {
     try {
         const limit = validateLimit(req.query.limit);
         const query = {};
@@ -124,7 +119,7 @@ async function findReviewsByType(req, res) {
                 query.rating = {$lte: 6, $gte: 4};
                 break;
             default:
-                throw error("Invalid rating type");
+                throw error("Invalid rating type", 400);
         }
 
         if (req.query.animeId) {
@@ -133,16 +128,15 @@ async function findReviewsByType(req, res) {
         const results = await Review.find(query).limit(limit);
         res.json(results);
     } catch (err) {
-        console.log(err.message);
-        res.status(400).json(formatError(err));
+        next(err);
     }
 }
 
-export function validateReviewBody(body, type="new") {
-    const expectedKeys = type === "new" ? ["anime_id", "user_id", "rating"] : ["rating"];
+function validateReviewBody(body, create = true) {
+    const expectedKeys = create ? ["anime_id", "user_id", "rating"] : ["rating"];
     const optionalKeys = ["comment"];
     const keyErrors = {};
-    
+
     for (const key in body) {
         if (!expectedKeys.includes(key) && (optionalKeys.length > 0 && !optionalKeys.includes(key))) {
             keyErrors[key] = "Invalid key detected";

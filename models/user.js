@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 import Review from "./review.js";
 
 const userSchema = new mongoose.Schema({
-    _id: {
-        type: mongoose.Types.ObjectId,
-        cast: "The string provided for the User Id must be a 24-character hexadecimal representation of an objectid"
-    },
     name: {
         type: String,
         required: [true, "Name is required"],
