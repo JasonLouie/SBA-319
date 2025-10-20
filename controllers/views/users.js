@@ -1,8 +1,8 @@
-import User from "../models/user.js";
-import Review from "../models/review.js";
-import originalUsers from "../seed/users.js";
+import User from "../../models/userModel.js";
+import Review from "../../models/reviewModel.js";
+import originalUsers from "../../seed/users.js";
 import mongoose from "mongoose";
-import { error, validateLimit } from "../functions/functions.js";
+import { error, validateLimit } from "../../functions/functions.js";
 
 async function findAllUsers(req, res, next) {
     try {

@@ -1,6 +1,28 @@
-import User from "../models/user.js";
-import Anime from "../models/anime.js";
-import Review from "../models/review.js";
+import User from "../models/userModel.js";
+import Anime from "../models/animeModel.js";
+import Review from "../models/reviewModel.js";
+import originalReviews from "../seed/reviews.js";
+import { error, validateLimit } from "../functions/functions.js";
+
+export async function getAllReviews(queryString) {
+    if (queryString.reviewId) {
+        const review = getReviewById(queryString.reviewId);
+        return review;
+    }
+    const limit = validateLimit(limit);
+    const query = {};
+
+    if (queryString.userId) {
+        query.user_id = queryString.userId;
+    }
+
+    if (queryString.animeId) {
+        query.anime_id = queryString.animeId;
+    }
+
+    const reviews = await Review.find(query).limit(limit);
+    return reviews;
+}
 
 export async function createReview(reviewBody) {
     // Validate body first
@@ -31,7 +53,7 @@ export async function createReview(reviewBody) {
     return review;
 }
 
-export async function findReview(reviewId) {
+export async function getReviewById(reviewId) {
     const review = await Review.findById(reviewId);
     if (!review) {
         throw error({ review: "Review not found" }, 404);
@@ -39,18 +61,19 @@ export async function findReview(reviewId) {
     return review;
 }
 
-export async function findAnimeReviews(animeId) {
-    const reviews = await Review.find({ anime_id: animeId });
+export async function getReviewsByAnimeId(animeId, queryString) {
+    const limit = validateLimit(queryString.limit);
+    const reviews = await Review.find({ anime_id: animeId }).limit(limit);
     return reviews;
 }
 
-export async function findUserReviews(userId) {
-    const reviews = await Review.find({ user_id: userId });
+export async function getReviewsByUserId(userId, queryString) {
+    const limit = validateLimit(queryString.limit);
+    const reviews = await Review.find({ user_id: userId }).limit(limit);
     return reviews;
 }
 
 export async function modifyReview(reviewId, reviewBody) {
-    // Validate body first
     validateReviewBody(req.body, false);
     const review = await Review.findByIdAndUpdate(reviewId, reviewBody, { runValidators: true, new: true });
     if (!review) {
@@ -65,6 +88,42 @@ export async function removeReview(reviewId) {
         throw error({ review: "Review not found" }, 404);
     }
     return review;
+}
+
+export async function resetReviews() {
+    await Review.deleteMany({});
+    const resultInsert = await Review.insertMany(originalReviews);
+    return resultInsert;
+}
+
+export async function getReviewsByType(type, queryString) {
+    const limit = validateLimit(queryString.limit);
+    const query = {};
+
+    switch (type) {
+        case "positive":
+            query.rating = { $gte: 7 };
+            break;
+        case "negative":
+            query.rating = { $lt: 4 };
+            break;
+        case "decent":
+            query.rating = { $lte: 6, $gte: 4 };
+            break;
+        default:
+            throw error("Invalid rating type", 400);
+    }
+
+    if (queryString.userId) {
+        query.user_id = queryString.userId;
+    }
+
+    if (queryString.animeId) {
+        query.anime_id = Number(queryString.animeId);
+    }
+    
+    const reviews = await Review.find(query).limit(limit);
+    return reviews;
 }
 
 function validateReviewBody(body, create = true) {

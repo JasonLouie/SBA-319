@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import AutoIncrementFactory from "mongoose-sequence";
-import Review from "./review.js";
+import Review from "./reviewModel.js";
 
 const AutoIncrement = AutoIncrementFactory(mongoose);
 

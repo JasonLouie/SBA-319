@@ -1,9 +1,9 @@
 import express from "express";
 import methodOverride from "method-override";
 import connectDB from "./db/conn.js";
-import usersRouter from "./routes/users.js";
-import animeRouter from "./routes/anime.js";
-import reviewsRouter from "./routes/reviews.js";
+import usersRouter from "./routes/api/userRouter.js";
+import animeRouter from "./routes/api/animeRouter.js";
+import reviewsRouter from "./routes/api/reviewRouter.js";
 
 const app = express();
 const PORT = 3000;

@@ -6,8 +6,8 @@ const counterSchema = new mongoose.Schema({
     seq: Number
 });
 
-counterSchema.static("reset", function() { 
-    return this.findOneAndUpdate({}, {$set: {seq: 8}});
+counterSchema.static("reset", function(v) { 
+    return this.findOneAndUpdate({}, {$set: {seq: v || 0}});
 });
 
 const Counter = mongoose.model("counter", counterSchema, "counters");

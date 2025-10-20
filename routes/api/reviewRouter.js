@@ -1,5 +1,5 @@
 import express from "express";
-import reviewController from "../controllers/reviews.js";
+import reviewController from "../../controllers/api/reviews.js";
 const router = express.Router();
 
 router.route("/")

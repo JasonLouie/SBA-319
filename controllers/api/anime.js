@@ -1,9 +1,5 @@
-import Anime from "../models/anime.js";
-import Review from "../models/review.js";
-import Counter from "../models/counter.js";
-import originalAnimes from "../seed/anime.js";
-import { error, validateLimit } from "../functions/functions.js";
-import { createReview } from "../services/reviews.js";
+import * as animeService from "../../services/animeService.js";
+import { createReview, getReviewsByAnimeId } from "../../services/reviewService.js";
 
 async function findAllAnimes(req, res, next) {
     try {
@@ -79,8 +75,8 @@ async function deleteAnime(req, res, next) {
 
 async function findReviewsByAnimeId(req, res, next) {
     try {
-        const results = await Review.find({ anime_id: req.params.id });
-        res.json(results);
+        const reviews = await getReviewsByAnimeId(req.params.id);
+        res.json(reviews);
     } catch (err) {
         next(err);
     }

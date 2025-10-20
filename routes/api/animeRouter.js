@@ -1,5 +1,5 @@
 import express from "express";
-import animeController from "../controllers/anime.js";
+import animeController from "../../controllers/api/anime.js";
 const router = express.Router();
 
 router.route("/")

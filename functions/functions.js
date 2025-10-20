@@ -16,7 +16,7 @@ export function validateLimit(limit) {
     } else if (!Number.isInteger(Number(limit)) || limit < 1) {
         throw error("Limit provided must be a positive integer");
     }
-    return Number(limit);
+    return Number(limit) > 25 ? 25 : Number(limit);
 }
 /**
  * Validates an object by checking if there are any keys that should not exist

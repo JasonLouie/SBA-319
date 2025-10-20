@@ -1,7 +1,7 @@
-import Review from "../models/review.js";
-import originalReviews from "../seed/reviews.js";
-import { error, validateLimit } from "../functions/functions.js";
-import { createReview, findReview, modifyReview, removeReview } from "../services/reviews.js";
+import Review from "../../models/reviewModel.js";
+import originalReviews from "../../seed/reviews.js";
+import { error, validateLimit } from "../../functions/functions.js";
+import { createReview, findReview, modifyReview, removeReview } from "../../services/reviewService.js";
 
 async function findAllReviews(req, res, next) {
     try {
