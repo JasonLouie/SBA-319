@@ -59,3 +59,5 @@ export function cleanseReviewBody(req, res, next) {
     }
     next();
 }
+
+export const timeOptions = { hour12: true, hour: "numeric", minute: "2-digit"};

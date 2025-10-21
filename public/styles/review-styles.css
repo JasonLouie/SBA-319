@@ -20,13 +20,6 @@
 .user-rating {
     bottom: 14px;
     display: flex;
-    width: 100%;
-}
-
-.user {
-    width: 40%;
-}
-
-.rating {
-    width: 25%;
+    justify-content: space-between;
+    width: 95%;
 }

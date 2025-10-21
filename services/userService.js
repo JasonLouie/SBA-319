@@ -1,6 +1,5 @@
 import User from "../models/userModel.js";
 import originalUsers from "../seed/users.js";
-import mongoose from "mongoose";
 import { error, validateLimit } from "../utils/utils.js";
 
 export async function getAllUsers(queryString) {
@@ -24,14 +23,6 @@ export async function createUser(userBody) {
         password: userBody.password
     });
     return user;
-}
-
-export async function getNameById(userId) {
-    const title = await User.findById(userId).select({"username": 1});
-    if (!title) {
-        throw error({ user: "User not found" }, 404);
-    }
-    return title;
 }
 
 export async function getUserById(userId) {

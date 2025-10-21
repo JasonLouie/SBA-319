@@ -10,6 +10,8 @@ import usersViewsRouter from "./routes/views/userRouter.js";
 import animeViewsRouter from "./routes/views/animeRouter.js";
 import reviewsViewsRouter from "./routes/views/reviewRouter.js";
 
+import { timeOptions } from "./utils/utils.js";
+
 const app = express();
 const PORT = 3000;
 
@@ -19,6 +21,12 @@ app.use(express.static("public"));
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(methodOverride("_method"));
+
+// Middleware that logs what request was made (method, url) and the time it was made.
+app.use((req, res, next) => {
+    console.log(`Request made: ${req.method} ${req.url} at ${new Date().toLocaleTimeString("en-US", timeOptions)}`);
+    next();
+});
 
 app.get("/", (req, res) => {
     res.render("index");

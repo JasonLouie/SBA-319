@@ -105,9 +105,7 @@ export async function removeReview(reviewId) {
 
 export async function resetReviews() {
     await Review.deleteMany({});
-    console.log("Hello");
     const resultInsert = await Review.insertMany(originalReviews);
-    console.log("Error");
     return resultInsert;
 }
 

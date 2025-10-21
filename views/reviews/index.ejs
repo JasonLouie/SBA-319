@@ -39,10 +39,10 @@
                 <% reviews.forEach(r => { %>
                 <a href="/demo/reviews/<%= r._id %>">
                     <div class="review-preview">
-                        <p class="anime field">anime name</p>
+                        <p class="anime field"><%= r.anime_id.title %></p>
                         <div class="user-rating">
-                            <p class="user">user's name</p>
-                            <p class="rating"><%= r.rating %></p>
+                            <p class="user">by: <%= r.user_id.username %></p>
+                            <p class="rating">rating: <%= r.rating %></p>
                         </div>
                     </div>
                 </a>
