@@ -7,21 +7,14 @@
     margin: 12px 0;
 }
 
-body.dark-mode .anime-icon {
-    background-image: url(../images/profile-dark.png);
-}
-
 .anime-icon {
     position: absolute;
     top: 50%;
     left: 8px;
     transform: translateY(-50%);
-    height: 54px;
+    border-radius: 4px;
+    height: auto;
     width: 54px;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 80% auto;
-    background-image: url(./images/profile-light.png);
 }
 
 .field, .type-year-rating {
@@ -41,11 +34,11 @@ body.dark-mode .anime-icon {
 }
 
 .type {
-    width: 17%;
+    width: 13%;
 }
 
 .year {
-    width: 15%;
+    width: 20%;
 }
 
 .rating {
@@ -53,5 +46,5 @@ body.dark-mode .anime-icon {
 }
 
 .status {
-    width: 20%;
+    width: 30%;
 }

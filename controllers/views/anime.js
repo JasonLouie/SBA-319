@@ -1,15 +1,16 @@
 import * as animeService from "../../services/animeService.js";
 import { getReviewsByAnimeId } from "../../services/reviewService.js";
 
-// GET /anime with optional query strings ?limit and/or ?animeId
+// GET /anime (No query strings for now)
 async function findAllAnimes(req, res, next) {
     try {
-        const animes = await animeService.getAllAnime(req.query);
+        const animes = await animeService.getAllAnime({});
         res.render("anime/index", {
             pageTitle: "All Anime | AniReview",
             anime: animes
         });
     } catch (err) {
+        err.action = "Failed to Get All Anime";
         next(err);
     }
 }
@@ -18,13 +19,9 @@ async function findAllAnimes(req, res, next) {
 async function createNewAnime(req, res, next) {
     try {
         const anime = await animeService.createAnime(req.body);
-        const msg = {type: "anime", action: req.method, message: "Successfully created anime"};
-        res.status(201).render("success", {
-            pageTitle: "Anime Creation Success | AniReview",
-            doc: anime,
-            msg: msg
-        });
+        res.redirect(`/demo/anime/${anime._id}`);
     } catch (err) {
+        err.action = "Failed to Create Anime";
         next(err);
     }
 }
@@ -34,6 +31,7 @@ async function showCreateAnime(req, res, next) {
     try {
         res.render("anime/create");
     } catch (err) {
+        err.action = "Failed to Show Create Anime Page";
         next(err)
     }
 }
@@ -47,6 +45,7 @@ async function findAnimeById(req, res, next) {
             anime: anime
         });
     } catch (err) {
+        err.action = "Failed to Get Anime";
         next(err);
     }
 }
@@ -54,14 +53,10 @@ async function findAnimeById(req, res, next) {
 // PATCH /anime/:id
 async function updateAnime(req, res, next) {
     try {
-        const anime = await animeService.modifyAnime(req.params.id, req.body);
-        const msg = {type: "anime", action: req.method, message: "Successfully updated anime"};
-        res.render("success", {
-            pageTitle: "Anime Update Success | AniReview",
-            doc: anime,
-            msg: msg
-        });
+        await animeService.modifyAnime(req.params.id, req.body);
+        res.redirect(`/demo/anime/${req.params.id}`);
     } catch (err) {
+        err.action = "Failed to Update Anime";
         next(err);
     }
 }
@@ -69,37 +64,37 @@ async function updateAnime(req, res, next) {
 // DELETE /anime/:id
 async function deleteAnime(req, res, next) {
     try {
-        const anime = await animeService.removeAnime(req.params.id);
-        const msg = {type: "anime", action: req.method, message: `Successfully deleted ${anime.title}`};
-        res.render("success", {
-            pageTitle: "Anime Deletion Success | AniReview",
-            msg: msg
-        });
+        await animeService.removeAnime(req.params.id);
+        res.redirect("/demo/anime");
     } catch (err) {
+        err.action = "Failed to Delete Anime";
         next(err);
     }
 }
 
-// GET /anime/:id/reviews
-async function findReviewsByAnimeId(req, res, next) {
-    try {
-        const reviews = await getReviewsByAnimeId(req.params.id);
-        res.render("reviews/index", {
-            reviews: reviews
-        });
-    } catch (err) {
-        next(err);
-    }
-}
+// GET /anime/:id/reviews (Does not work yet must fix)
+// async function findReviewsByAnimeId(req, res, next) {
+//     try {
+//         const reviews = getAllReviewsWithDetails(req.params.id);
+//         res.render("reviews/index", {
+//             pageTitle: `Review for ${title} | AniReview`,
+//             reviews: reviews,
+//             title: title,
+//             name: name
+//         });
+//     } catch (err) {
+//         err.action = "Failed to Get Reviews for Anime"
+//         next(err);
+//     }
+// }
 
 // GET /anime/seed
 async function resetAnimeData(req, res, next) {
     try {
-        const anime = await animeService.resetAnimes();
-        res.render("anime/index", {
-            anime: anime
-        });
+        await animeService.resetAnimes();
+        res.redirect("/demo/anime");
     } catch (err) {
+        err.action = "Failed to Reset Anime";
         next(err);
     }
 }
@@ -110,7 +105,6 @@ export default {
     findAnimeById,
     updateAnime,
     deleteAnime,
-    animeReviews: findReviewsByAnimeId,
     seed: resetAnimeData,
     create: showCreateAnime
 }

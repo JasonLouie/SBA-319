@@ -1,12 +1,16 @@
 import * as userService from "../../services/userService.js";
-import { createReview, getReviewsByUserId } from "../../services/reviewService.js";
+import { getAllReviewsWithDetails, getReviewsByUserId } from "../../services/reviewService.js";
 
-// GET /users with optional query strings ?limit and/or ?userId
+// GET /users (No query strings for now)
 async function findAllUsers(req, res, next) {
     try {
-        const users = await userService.getAllUsers(req.query);
-        res.json(users);
+        const users = await userService.getAllUsers({});
+        res.render("users/index", {
+            pageTitle: "All Users | AniReview",
+            users: users
+        });
     } catch (err) {
+        err.action = "Failed to Get All Users";
         next(err);
     }
 }
@@ -15,9 +19,20 @@ async function findAllUsers(req, res, next) {
 async function createNewUser(req, res, next) {
     try {
         const user = await userService.createUser(req.body);
-        res.json(user);
+        res.redirect(`/demo/users/${user._id}`);
     } catch (err) {
+        err.action = "Failed to Create User";
         next(err);
+    }
+}
+
+// GET /users/create (Load create page)
+async function showCreateUser(req, res, next) {
+    try {
+        res.render("users/create");
+    } catch (err) {
+        err.action = "Failed to Show Create User Page";
+        next(err)
     }
 }
 
@@ -25,8 +40,12 @@ async function createNewUser(req, res, next) {
 async function findUserById(req, res, next) {
     try {
         const user = await userService.getUserById(req.params.id);
-        res.json(user);
+        res.render("users/doc", {
+            pageTitle: `${user.username} | AniReview`,
+            user: user
+        });
     } catch (err) {
+        err.action = "Failed to Get User";
         next(err);
     }
 }
@@ -34,9 +53,10 @@ async function findUserById(req, res, next) {
 // PATCH /users/:id
 async function updateUser(req, res, next) {
     try {
-        const user = await userService.modifyUser(req.params.id, req.body);
-        res.json(user);
+        await userService.modifyUser(req.params.id, req.body);
+        res.redirect(`/demo/users/${req.params.id}`);
     } catch (err) {
+        err.action = "Failed to Update User";
         next(err);
     }
 }
@@ -44,41 +64,35 @@ async function updateUser(req, res, next) {
 // DELETE /users/:id
 async function deleteUser(req, res, next) {
     try {
-        const user = await userService.removeUser(req.params.id);
-        res.json(user);
+        await userService.removeUser(req.params.id);
+        res.redirect("/demo/users");
     } catch (err) {
+        err.action = "Failed to Delete User";
         next(err);
     }
 }
 
-// GET /users/:id/reviews
-async function findReviewsByUser(req, res, next) {
-    try {
-        const reviews = await getReviewsByUserId(req.params.id);
-        res.json(reviews);
-    } catch (err) {
-        next(err);
-    }
-}
+// GET /users/:id/reviews (Does not work yet must fix)
+// async function findReviewsByUserId(req, res, next) {
+//     try {
+//         const reviews = getAllReviewsWithDetails(req.params.id);
+//         res.render("reviews/index", {
+//             pageTitle: `Review for ${title} | AniReview`,
+//             reviews: reviews
+//         });
+//     } catch (err) {
+//         err.action = "Failed to Get Reviews for User"
+//         next(err);
+//     }
+// }
 
-// POST /users/:id/reviews
-async function createNewReview(req, res, next) {
-    try {
-        req.body.user_id = req.params.id;
-        // Anime Id should be provided in the body. Otherwise proper err thrown
-        const reviewDoc = await createReview(req.body);
-        res.json(reviewDoc);
-    } catch (err) {
-        next(err);
-    }
-}
-
-// GET /users/seed
+// GET /user/seed
 async function resetUserData(req, res, next) {
     try {
-        const results = await userService.resetUsers();
-        res.json(results);
+        await userService.resetUsers();
+        res.redirect("/demo/users");
     } catch (err) {
+        err.action = "Failed to Reset User";
         next(err);
     }
 }
@@ -89,7 +103,6 @@ export default {
     findUserById,
     updateUser,
     deleteUser,
-    userReviews: findReviewsByUser,
-    createReview: createNewReview,
-    seed: resetUserData
+    seed: resetUserData,
+    create: showCreateUser
 }

@@ -6,7 +6,6 @@
         <title><%= pageTitle %></title>
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/anime-styles.css" />
-        <script src="/scripts/script.js" defer></script>
     </head>
     <body class="dark-mode">
         <header>
@@ -30,13 +29,27 @@
                         </a>
                         <a href="/demo/anime/reset">
                             <div id="remove-doc" class="align-vert">
+                                <p>-</p>
                                 <p>Reset Anime</p>
                             </div>
                         </a>
                     </div>
                 </div>
-                <!-- For each showing each result from anime var -->
-                <a href="/anime/id">
+                <% anime.forEach(a => { %>
+                    <a href="/demo/anime/<%= a._id %>">
+                        <div class="anime-preview">
+                            <img class="anime-icon" src="/images/anime/<%= a._id %>.png"/>
+                            <p class="title field"><%= a.title %></p>
+                            <div class="type-year-rating">
+                                <p class="type"><%= a.type %></p>
+                                <p class="year">Year: <%= a.premiered %></p>
+                                <p class="rating">Rating: <%= a.avg_user_rating || "-" %></p>
+                                <p class="status">Status: <%= a.status %></p>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+                <!-- <a href="/anime/id">
                     <div class="anime-preview">
                         <div class="anime-icon"></div>
                         <p class="title field">title</p>
@@ -47,7 +60,7 @@
                             <p class="status">status</p>
                         </div>
                     </div>
-                </a>
+                </a> -->
             </div>
         </main>
     </body>

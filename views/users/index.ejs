@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AniReview | Users</title>
+        <title><%= pageTitle %></title>
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/user-styles.css" />
     </head>
@@ -20,21 +20,30 @@
             <div class="content">
                 <div class="space-between">
                     <h1>Users</h1>
-                    <a href="/users/create">
-                        <div id="create-doc" class="align-vert">
-                            <p>+</p>
-                            <p>Create User</p>
-                        </div>
-                    </a>
+                    <div class="doc-actions">
+                        <a href="/demo/users/create">
+                            <div id="create-doc" class="align-vert">
+                                <p>+</p>
+                                <p>Create User</p>
+                            </div>
+                        </a>
+                        <a href="/demo/users/reset">
+                            <div id="remove-doc" class="align-vert">
+                                <p>-</p>
+                                <p>Reset Users</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                <!-- For each using the users var -->
-                <a href="/users/:id">
+                <% users.forEach(u => { %>
+                <a href="/demo/users/<%= u._id %>">
                     <div class="user-preview">
                         <div class="profile-icon"></div>
-                        <p class="name field">name</p>
-                        <p class="username field">username</p>
+                        <p class="name field"><%= u.name %></p>
+                        <p class="username field"><%= u.username %></p>
                     </div>
                 </a>
+                <% }) %>
             </div>
         </main>
     </body>

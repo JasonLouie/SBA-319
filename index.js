@@ -70,7 +70,8 @@ app.use((err, req, res, next) => {
 
     // Handle sending demo errors
     if (req.url.startsWith("/demo")) { 
-        res.render("error", {messages: Object.keys(messages).length > 0 ? messages : err.message, pageTitle: errorType});
+        const error = Object.keys(messages).length > 0 ? messages : err.message;
+        res.render("error", {messages: error, pageTitle: errorType, failedAction: err.action});
     } else { // Handle sending api errors
         if (Object.keys(messages).length > 0) {
             res.status(400).json({errors: messages});

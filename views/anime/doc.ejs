@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AniReview | View Anime</title>
+        <title><%= pageTitle %></title>
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/review-styles.css" />
         <script src="/scripts/script.js" defer></script>
@@ -11,46 +11,46 @@
     <body class="dark-mode">
         <header>
             <nav class="align-vert">
-                <a href="/index">AniReview</a>
-                <a class="flex" href="/users/index">Users</a>
-                <a class="flex" href="/anime/index">Anime</a>
-                <a class="flex" href="/reviews/index">Reviews</a>
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
             </nav>
         </header>
         <main class="flex">
             <div class="content">
                 <div id="anime-doc" class="flex">
                     <h1 id="action-heading">View Anime</h1>
-                    <form id="form" action="/anime/:id" method="get">
+                    <form id="form" action="/demo/anime/<%= anime._id %>?_method=PATCH" method="post">
                         <label for="id">Id</label>
-                        <input type="number" name="id" id="id" value="1" disabled>
+                        <input type="number" name="id" id="id" value="<%= anime._id %>" disabled>
     
                         <label for="title">Title</label>
-                        <input type="string" name="title" id="title" value="Title" disabled>
+                        <input type="string" name="title" id="title" value="<%= anime.title %>" disabled>
                         
                         <label for="status">Status</label>
-                        <input type="string" name="status" id="status" value="Ongoing" disabled>
+                        <input type="string" name="status" id="status" value="<%= anime.status %>" disabled>
                         
                         <label for="genres">Genres</label>
-                        <input type="string" name="genres" id="genres" value="Genres" disabled>
+                        <input type="string" name="genres" id="genres" value="<%= anime.genres.join(', ') %>" disabled>
                         
                         <label for="type">Type</label>
-                        <input type="string" name="type" id="type" value="TV" disabled>
+                        <input type="string" name="type" id="type" value="<%= anime.type %>" disabled>
     
                         <label for="premiered">Premiered</label>
-                        <input type="number" name="premiered" id="premiered" value="2025" disabled>
+                        <input type="number" name="premiered" id="premiered" value="<%= anime.premiered %>" disabled>
     
                         <label for="episodes">Episodes</label>
-                        <input type="number" name="episodes" id="episodes" value="1" disabled>
+                        <input type="number" name="episodes" id="episodes" value="<%= anime.episodes %>" disabled>
 
                         <label for="avg-rating">Average User Rating</label>
-                        <input type="number" name="avg-rating" id="avg-rating" value="9.4" disabled>
+                        <input type="string" name="avg-rating" id="avg-rating" value="<%= anime.avg_user_rating || 'N/A' %>" disabled>
                         
                         <div id="form-controls" class="flex">
-                            <a class="control-btn" href="/anime/index">Back</a>
-                            <a class="control-btn" href="/anime/id">View</a>
+                            <a class="control-btn" href="/demo/anime">Back</a>
+                            <a class="control-btn" href="/demo/anime/<%= anime._id %>">View</a>
                             <button class="control-btn" type="button" id="edit">Edit</button>
-                            <a class="control-btn" href="/anime/id/delete">Delete</a>
+                            <button class="control-btn" type="submit" id="delete" formaction="/demo/anime/<%= anime._id %>?_method=DELETE">Delete</button>
                             <button class="control-btn hidden" type="submit" id="update">Update</button>
                         </div>
                     </form>

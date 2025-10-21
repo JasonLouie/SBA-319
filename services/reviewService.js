@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import Anime from "../models/animeModel.js";
 import Review from "../models/reviewModel.js";
 import originalReviews from "../seed/reviews.js";
-import { error, validateLimit } from "../functions/functions.js";
+import { error, validateLimit } from "../utils/utils.js";
 
 export async function getAllReviews(queryString) {
     if (queryString.reviewId) {
@@ -21,6 +21,19 @@ export async function getAllReviews(queryString) {
     }
 
     const reviews = await Review.find(query).limit(limit);
+    return reviews;
+}
+
+export async function getAllReviewsWithDetails() {
+    const reviews = await Review.find({}).limit(25)
+        .populate({
+            path: "user_id",
+            select: "username"
+        })
+        .populate({
+            path: "anime_id",
+            select: "title"
+        });
     return reviews;
 }
 
@@ -74,7 +87,7 @@ export async function getReviewsByUserId(userId, queryString) {
 }
 
 export async function modifyReview(reviewId, reviewBody) {
-    validateReviewBody(req.body, false);
+    validateReviewBody(reviewBody);
     const review = await Review.findByIdAndUpdate(reviewId, reviewBody, { runValidators: true, new: true });
     if (!review) {
         throw error({ review: "Review not found" }, 404);
@@ -92,7 +105,9 @@ export async function removeReview(reviewId) {
 
 export async function resetReviews() {
     await Review.deleteMany({});
+    console.log("Hello");
     const resultInsert = await Review.insertMany(originalReviews);
+    console.log("Error");
     return resultInsert;
 }
 
@@ -126,15 +141,11 @@ export async function getReviewsByType(type, queryString) {
     return reviews;
 }
 
-function validateReviewBody(body, create = true) {
-    const expectedKeys = create ? ["anime_id", "user_id", "rating"] : ["rating"];
-    const optionalKeys = ["comment"];
+function validateReviewBody(body) {
     const keyErrors = {};
 
     for (const key in body) {
-        if (!expectedKeys.includes(key) && (optionalKeys.length > 0 && !optionalKeys.includes(key))) {
-            keyErrors[key] = "Invalid key detected";
-        } else if (key === "anime_id" && typeof body[key] != "number") {
+        if (key === "anime_id" && typeof body[key] != "number") {
             keyErrors[key] = "Anime Id must be a number";
         } else if (key === "rating" && typeof body[key] != "number") {
             keyErrors[key] = "Rating must be a number";

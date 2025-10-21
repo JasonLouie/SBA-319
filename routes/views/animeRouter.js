@@ -1,10 +1,11 @@
 import express from "express";
 import animeController from "../../controllers/views/anime.js";
+import { cleanseAnimeBody } from "../../utils/utils.js";
 const router = express.Router();
 
 router.route("/")
     .get(animeController.findAllAnimes)
-    .post(animeController.createAnime);
+    .post(cleanseAnimeBody, animeController.createAnime);
 
 router.get("/create", animeController.create);
 router.get("/reset", animeController.seed);
@@ -13,10 +14,10 @@ router.get("/reset", animeController.seed);
 
 router.route("/:id")
     .get(animeController.findAnimeById)
-    .patch(animeController.updateAnime)
+    .patch(cleanseAnimeBody, animeController.updateAnime)
     .delete(animeController.deleteAnime);
 
-router.route("/:id/reviews")
-    .get(animeController.animeReviews)
+// router.route("/:id/reviews")
+//     .get(animeController.animeReviews)
 
 export default router;

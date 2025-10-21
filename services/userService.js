@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import originalUsers from "../seed/users.js";
 import mongoose from "mongoose";
-import { error, validateLimit } from "../functions/functions.js";
+import { error, validateLimit } from "../utils/utils.js";
 
 export async function getAllUsers(queryString) {
     if (queryString.userId) {
@@ -24,6 +24,14 @@ export async function createUser(userBody) {
         password: userBody.password
     });
     return user;
+}
+
+export async function getNameById(userId) {
+    const title = await User.findById(userId).select({"username": 1});
+    if (!title) {
+        throw error({ user: "User not found" }, 404);
+    }
+    return title;
 }
 
 export async function getUserById(userId) {
@@ -53,26 +61,12 @@ export async function removeUser(userId) {
 
 export async function resetUsers() {
     await User.deleteMany({});
-
-    // Create static dev user (not adhering to schema on purpose)
-    const devUserData = {
-        _id: new mongoose.Types.ObjectId("68f2ff6c36ffc14fdd3fcc6d"),
-        name: "dev",
-        username: "dev"
-    };
-    const [devResult, resultInsert] = await Promise.all([User.db.collection("users").insertOne(devUserData), await User.insertMany(originalUsers)]);
+    const resultInsert = await User.insertMany(originalUsers);
     return resultInsert;
 }
 
 function validateUserBody(body, create = true) {
-    const expectedKeys = create ? ["name", "username", "email", "password"] : ["name", "email", "password"];
     const keyErrors = {};
-
-    for (const key in body) {
-        if (!expectedKeys.includes(key)) {
-            keyErrors[key] = "Invalid key detected";
-        }
-    }
 
     if (!create && body.username != undefined) {
         keyErrors.username = "Username cannot be changed";

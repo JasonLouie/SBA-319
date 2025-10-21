@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AniReview | View Review</title>
+        <title><%= pageTitle %></title>
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/review-styles.css" />
         <script src="/scripts/script.js" defer></script>
@@ -21,27 +21,27 @@
             <div class="content">
                 <div id="reviews-doc" class="flex">
                     <h1 id="action-heading">View Review</h1>
-                    <form id="form" action="/reviews/:id" method="get">
+                    <form id="form" action="/demo/reviews/<%= review._id %>?_method=PATCH" method="post">
                         <label for="id">Id</label>
-                        <input type="text" name="id" id="id" value="id" disabled>
+                        <input type="text" name="id" id="id" value="<%= review._id %>" disabled>
 
                         <label for="anime_id">Anime Id</label>
-                        <input type="number" name="anime_id" id="anime_id" value="1" disabled>
+                        <input type="number" name="anime_id" id="anime_id" value="<%= review.anime_id %>" disabled>
                         
                         <label for="user_id">User Id</label>
-                        <input type="string" name="user_id" id="user_id" value="User Id" disabled>
+                        <input type="string" name="user_id" id="user_id" value="<%= review.user_id %>" disabled>
                         
                         <label for="comment">Comment</label>
-                        <textarea type="text" name="comment" id="comment" disabled></textarea>
+                        <textarea type="text" name="comment" id="comment" disabled><%= review.comment %></textarea>
                         
                         <label for="rating">Rating</label>
-                        <input type="number" name="rating" id="rating" value="10" disabled>
+                        <input type="number" name="rating" id="rating" value="<%= review.rating %>" disabled>
                         
                         <div id="form-controls" class="flex">
-                            <a class="control-btn" href="/reviews/index">Back</a>
-                            <a class="control-btn" href="/reviews/id">View</a>
+                            <a class="control-btn" href="/demo/reviews">Back</a>
+                            <a class="control-btn" href="/demo/reviews/<%= review._id %>?">View</a>
                             <button class="control-btn" type="button" id="edit">Edit</button>
-                            <a class="control-btn" href="/reviews/id/delete">Delete</a>
+                            <button class="control-btn" type="submit" id="delete" formaction="/demo/reviews/<%= review._id %>?_method=DELETE">Delete</button>
                             <button class="control-btn hidden" type="submit" id="update">Update</button>
                         </div>
                     </form>

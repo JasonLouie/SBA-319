@@ -1,11 +1,17 @@
+import { getAnimeById } from "../../services/animeService.js";
 import * as reviewService from "../../services/reviewService.js";
+import { getUserById } from "../../services/userService.js";
 
 // GET /reviews with optional query strings ?reviewId, ?userId, ?animeId, ?limit
 async function findAllReviews(req, res, next) {
     try {
-        const reviews = await reviewService.getAllReviews(req.query);
-        res.json(reviews);
+        const reviews = await reviewService.getAllReviewsWithDetails();
+        res.render("reviews/index", {
+            pageTitle: "All Reviews | AniReview",
+            reviews: reviews
+        });
     } catch (err) {
+        err.action = "Failed to Get All Reviews";
         next(err);
     }
 }
@@ -14,9 +20,20 @@ async function findAllReviews(req, res, next) {
 async function createNewReview(req, res, next) {
     try {
         const review = await reviewService.createReview(req.body);
-        res.status(201).json(review);
+        res.redirect(`/demo/anime/${review._id}`);
     } catch (err) {
+        err.action = "Failed to Create Review";
         next(err);
+    }
+}
+
+// GET /reviews/create (Load create page)
+async function showCreateReview(req, res, next) {
+    try {
+        res.render("reviews/create");
+    } catch (err) {
+        err.action = "Failed to Show Create Review Page";
+        next(err)
     }
 }
 
@@ -24,7 +41,13 @@ async function createNewReview(req, res, next) {
 async function findReviewById(req, res, next) {
     try {
         const review = await reviewService.getReviewById(req.params.id);
-        res.json(review);
+        const [anime, user] = await Promise.all([getAnimeById(review.anime_id), getUserById(review.user_id)]);
+        res.render("reviews/doc", {
+            pageTitle: `Review for ${anime.title} | AniReview`,
+            review: review,
+            title: anime.title,
+            name: user.name
+        });
     } catch (err) {
         next(err);
     }
@@ -33,9 +56,10 @@ async function findReviewById(req, res, next) {
 // PATCH /reviews/:id
 async function updateReview(req, res, next) {
     try {
-        const updatedReview = await reviewService.modifyReview(req.params.id, reviewBody);
-        res.json(updatedReview);
+        await reviewService.modifyReview(req.params.id, req.body);
+        res.redirect(`/demo/reviews/${req.params.id}`);
     } catch (err) {
+        err.action = "Failed to Update Review";
         next(err);
     }
 }
@@ -43,9 +67,10 @@ async function updateReview(req, res, next) {
 // DELETE /reviews/:id
 async function deleteReview(req, res, next) {
     try {
-        const deletedReview = await reviewService.removeReview(req.params.id);
-        res.json(deletedReview);
+        await reviewService.removeReview(req.params.id);
+        res.redirect("/demo/reviews");
     } catch (err) {
+        err.action = "Failed to Delete Review";
         next(err);
     }
 }
@@ -53,19 +78,11 @@ async function deleteReview(req, res, next) {
 // GET /reviews/seed
 async function resetReviewData(req, res, next) {
     try {
-        const reviews = await reviewService.resetReviews();
-        res.json(reviews);
+        await reviewService.resetReviews();
+        res.redirect("/demo/reviews");
     } catch (err) {
-        next(err);
-    }
-}
-
-// GET /reviews/rating/:type (type as positive, negative, decent)
-async function findReviewsByType(req, res, next) {
-    try {
-        const reviews = await reviewService.getReviewsByType(req.params.type, req.query);
-        res.json(reviews);
-    } catch (err) {
+        console.log(err);
+        err.action = "Failed to Reset Review";
         next(err);
     }
 }
@@ -76,6 +93,6 @@ export default {
     findReviewById,
     updateReview,
     deleteReview,
-    findReviewsByType,
-    seed: resetReviewData
+    seed: resetReviewData,
+    create: showCreateReview
 }

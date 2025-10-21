@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title><%= pageTitle %></title>
+        <title>Create User | AniReview</title>
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/review-styles.css" />
     </head>
@@ -20,7 +20,7 @@
             <div id="content">
                 <div id="users-doc" class="flex">
                     <h1 id="action-heading">View User</h1>
-                    <form id="form" action="/users/:id" method="post">
+                    <form id="form" action="/demo/users" method="post">
                         <label for="name">Name</label>
                         <input type="text" name="name" id="name">
                         
@@ -34,7 +34,7 @@
                         <input type="string" name="password" id="password">
                         
                         <div id="form-controls" class="flex">
-                            <a class="control-btn" href="/users/index">Back</a>
+                            <a class="control-btn" href="/demo/users">Back</a>
                             <button class="control-btn" type="submit" id="create">Create</button>
                         </div>
                     </form>

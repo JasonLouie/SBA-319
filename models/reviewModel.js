@@ -4,12 +4,14 @@ const reviewSchema = new mongoose.Schema({
     anime_id: {
         type: Number,
         required: [true, "Anime Id is required"],
-        cast: "Anime Id must be a number"
+        cast: "Anime Id must be a number",
+        ref: "Anime"
     },
     user_id: {
         type: mongoose.Types.ObjectId,
         required: [true, "User Id is required"],
-        cast: "The string provided for the User Id must be a 24-character hexadecimal representation of an objectid"
+        cast: "The string provided for the User Id must be a 24-character hexadecimal representation of an objectid",
+        ref: "user"
     },
     comment: {
         type: String,

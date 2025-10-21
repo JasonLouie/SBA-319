@@ -129,8 +129,18 @@ textarea {
     align-items: center;
 }
 
+#create-doc, #remove-doc {
+    height: 31px;
+}
+
 #create-doc {
     border: 1px solid lawngreen;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#remove-doc {
+    border: 1px solid red;
     border-radius: 10px;
 }
 
@@ -138,18 +148,26 @@ textarea {
     padding: 4px 0;
 }
 
-#create-doc > p:first-child {
+:is(#create-doc, #remove-doc) > p:first-child {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    margin-left: 3px;
-    margin-right: 3px;
     border-radius: 50%;
     font-size: 15px;
     font-weight: bold;
 }
 
-#create-doc > p:last-child {
+#create-doc > p:first-child {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#remove-doc > p:first-child {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+:is(#create-doc, #remove-doc) > p:last-child {
     padding-right: 3px;
 }
 
