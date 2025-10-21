@@ -48,7 +48,7 @@
                         
                         <div id="form-controls" class="flex">
                             <a class="control-btn" href="/demo/anime">Back</a>
-                            <a class="control-btn" href="/demo/anime/<%= anime._id %>">View</a>
+                            <a class="control-btn hidden" id="cancel" href="/demo/anime/<%= anime._id %>">Cancel</a>
                             <button class="control-btn" type="button" id="edit">Edit</button>
                             <button class="control-btn" type="submit" id="delete" formaction="/demo/anime/<%= anime._id %>?_method=DELETE">Delete</button>
                             <button class="control-btn hidden" type="submit" id="update">Update</button>

@@ -1,13 +1,16 @@
+const cancelBtn = document.getElementById("cancel");
 const updateBtn = document.getElementById("update");
 const editBtn = document.getElementById("edit");
 const form = document.getElementById("form");
 
-if (form && editBtn && updateBtn) {
+if (form && editBtn && updateBtn && cancelBtn) {
     editBtn.addEventListener("click", () => {
+        editBtn.classList.add("hidden");
+        cancelBtn.classList.remove("hidden");
+        updateBtn.classList.remove("hidden");
+
         const docType = form.parentElement.id.slice(0,-4);
         
-        // Show updateBtn
-        updateBtn.classList.remove("hidden");
 
         // Enable specific inputs
         let enabledInputs = [];

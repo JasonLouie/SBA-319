@@ -4,7 +4,7 @@ import Review from "../models/reviewModel.js";
 import originalReviews from "../seed/reviews.js";
 import { error, validateLimit } from "../utils/utils.js";
 
-export async function getAllReviews(queryString) {
+export async function getAllReviews(queryString = {}) {
     if (queryString.reviewId) {
         const review = getReviewById(queryString.reviewId);
         return review;
@@ -24,8 +24,24 @@ export async function getAllReviews(queryString) {
     return reviews;
 }
 
-export async function getAllReviewsWithDetails() {
-    const reviews = await Review.find({}).limit(25)
+export async function getAllReviewsWithDetails(queryString = {}) {
+    if (queryString.reviewId) {
+        const review = getReviewById(queryString.reviewId);
+        return review;
+    }
+
+    const limit = validateLimit(queryString.limit);
+    const query = {};
+
+    if (queryString.userId) {
+        query.user_id = queryString.userId;
+    }
+
+    if (queryString.animeId) {
+        query.anime_id = queryString.animeId;
+    }
+
+    const reviews = await Review.find({}).limit(limit)
         .populate({
             path: "user_id",
             select: "username"

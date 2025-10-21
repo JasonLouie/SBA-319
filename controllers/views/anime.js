@@ -79,8 +79,6 @@ async function deleteAnime(req, res, next) {
 //         res.render("reviews/index", {
 //             pageTitle: `Review for ${title} | AniReview`,
 //             reviews: reviews,
-//             title: title,
-//             name: name
 //         });
 //     } catch (err) {
 //         err.action = "Failed to Get Reviews for Anime"

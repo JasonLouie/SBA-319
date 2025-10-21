@@ -4,7 +4,7 @@
  * @param {number} status 
  * @returns {object}
  */
-export function error(msg, status=400) {
+export function error(msg, status = 400) {
     return { message: msg, status: status, custom: true };
 }
 
@@ -27,16 +27,16 @@ export function validateLimit(limit) {
  */
 export function cleanseAnimeBody(req, res, next) {
     // Cleanse genres
-    if (req.body.genres && typeof req.body.genres === "string"){
+    if (req.body.genres && typeof req.body.genres === "string") {
         const genresArray = req.body.genres.split(",").map(ch => ch.trim()).filter(ch => ch.length > 0);
         req.body.genres = genresArray;
     }
 
-    if (req.body.episodes && typeof req.body.episodes === "string"){
+    if (req.body.episodes && typeof req.body.episodes === "string") {
         req.body.episodes = Number(req.body.episodes);
     }
 
-    if (req.body.premiered && typeof req.body.premiered === "string"){
+    if (req.body.premiered && typeof req.body.premiered === "string") {
         req.body.premiered = Number(req.body.premiered);
     }
     next();
@@ -60,4 +60,13 @@ export function cleanseReviewBody(req, res, next) {
     next();
 }
 
-export const timeOptions = { hour12: true, hour: "numeric", minute: "2-digit"};
+export function cleanseModifyReviewBody(req, res, next) {
+    const forbiddenKeys = ["_id", "anime_id", "user_id"];
+    forbiddenKeys.forEach(key => {
+        if (body[key] != undefined) {
+            body[key] = undefined;
+        }
+    })
+}
+
+export const timeOptions = { hour12: true, hour: "numeric", minute: "2-digit" };

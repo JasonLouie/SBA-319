@@ -42,7 +42,7 @@
                         
                         <div id="form-controls" class="flex">
                             <a class="control-btn" href="/demo/users">Back</a>
-                            <a class="control-btn" href="/demo/users/<%= user._id %>">View</a>
+                            <a class="control-btn hidden" id="cancel" href="/demo/users/<%= user._id %>">Cancel</a>
                             <button class="control-btn" type="button" id="edit">Edit</button>
                             <button class="control-btn" type="submit" id="delete" formaction="/demo/users/<%= user._id %>?_method=DELETE">Delete</button>
                             <button class="control-btn hidden" type="submit" id="update">Update</button>
