@@ -36,7 +36,7 @@ export async function getAnimeById(animeId) {
 }
 
 export async function modifyAnime(animeId, animeBody) {
-    validateAnimeBody(animeBody);
+    validateAnimeBody(animeBody, false);
     const anime = await Anime.findByIdAndUpdate(animeId, animeBody, { runValidators: true, new: true });
     if (!anime) {
         throw error({ anime: "Anime not found" }, 404);
@@ -60,15 +60,19 @@ export async function resetAnimes(req, res, next) {
     return resultInsert;
 }
 
-function validateAnimeBody(body) {
+function validateAnimeBody(body, create=true) {
     const keyErrors = {};
 
-    for (const key in body) {
-        if (key === "premiered" && typeof body[key] != "number") {
-            keyErrors[key] = "Year Premiered must be a number";
-        } else if (key === "episodes" && typeof body[key] != "number") {
-            keyErrors[key] = "Episodes must be a number";
-        }
+    if (body.premiered && typeof body.premiered != "number"){
+        keyErrors.premiered = "Year Premiered must be a number";
+    }
+
+    if (body.episodes && typeof body.episodes != "number") {
+        keyErrors.episodes = "Episodes must be a number";
+    }
+
+    if (!create && body._id != undefined) {
+        keyErrors._id = "_id cannot be changed";
     }
 
     if (Object.keys(keyErrors).length > 0) {

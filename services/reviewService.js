@@ -87,7 +87,7 @@ export async function getReviewsByUserId(userId, queryString) {
 }
 
 export async function modifyReview(reviewId, reviewBody) {
-    validateReviewBody(reviewBody);
+    validateReviewBody(reviewBody, false);
     const review = await Review.findByIdAndUpdate(reviewId, reviewBody, { runValidators: true, new: true });
     if (!review) {
         throw error({ review: "Review not found" }, 404);
@@ -139,15 +139,22 @@ export async function getReviewsByType(type, queryString) {
     return reviews;
 }
 
-function validateReviewBody(body) {
+function validateReviewBody(body, create=true) {
     const keyErrors = {};
 
-    for (const key in body) {
-        if (key === "anime_id" && typeof body[key] != "number") {
-            keyErrors[key] = "Anime Id must be a number";
-        } else if (key === "rating" && typeof body[key] != "number") {
-            keyErrors[key] = "Rating must be a number";
-        }
+    if (body.anime_id && typeof body.anime_id != "number") {
+        keyErrors.anime_id = "Anime Id must be a number";
+    } else if (body.rating && typeof body.rating != "number") {
+        keyErrors.rating = "Rating must be a number";
+    }
+
+    if (!create) {
+        const forbiddenKeys = ["_id", "anime_id", "user_id"];
+        forbiddenKeys.forEach(key => {
+            if (body[key] != undefined) {
+                keyErrors[key] = `${key} cannot be changed`;
+            }
+        })
     }
 
     if (Object.keys(keyErrors).length > 0) {

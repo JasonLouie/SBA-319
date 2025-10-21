@@ -33,7 +33,7 @@ async function findReviewById(req, res, next) {
 // PATCH /reviews/:id
 async function updateReview(req, res, next) {
     try {
-        const updatedReview = await reviewService.modifyReview(req.params.id, reviewBody);
+        const updatedReview = await reviewService.modifyReview(req.params.id, req.body);
         res.json(updatedReview);
     } catch (err) {
         next(err);
