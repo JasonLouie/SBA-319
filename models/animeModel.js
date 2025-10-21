@@ -40,33 +40,37 @@ const animeSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: [
-            "Ongoing",
-            "Finished",
-            "Not Aired"
-        ],
+        enum: ["Ongoing", "Finished", "Not Aired"],
         required: [true, "Status is required"],
         message: "{VALUE} is not a valid status for an anime"
     },
     type: {
         type: String,
-        enum: [
-            "TV",
-            "Movie",
-            "ONA"
-        ],
+        enum: ["TV", "Movie", "ONA", "OVA"],
         required: [true, "Type is required"],
         message: "{VALUE} is not a valid type of anime"
     },
     premiered: {
         type: Number,
         required: [true, "The year premiered is required"],
-        min: [1965, "The year premiered must be at least 1995"],
+        min: [1965, "The year premiered must be at least 1965"],
+        validate: {
+            validator: function (v) {
+                return Number.isInteger(v);
+            },
+            message: "Year must be an integer"
+        }
     },
     episodes: {
         type: Number,
         default: 0,
-        min: [0, "The number of episodes must be at least 0"]
+        min: [0, "The number of episodes must be at least 0"],
+        validate: {
+            validator: function (v) {
+                return Number.isInteger(v);
+            },
+            message: "Year must be an integer"
+        }
     }
 }, { _id: false, id: false, versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true } });
 

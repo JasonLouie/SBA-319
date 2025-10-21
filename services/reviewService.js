@@ -144,7 +144,9 @@ function validateReviewBody(body, create=true) {
 
     if (body.anime_id && typeof body.anime_id != "number") {
         keyErrors.anime_id = "Anime Id must be a number";
-    } else if (body.rating && typeof body.rating != "number") {
+    }
+    
+    if (body.rating && typeof body.rating != "number") {
         keyErrors.rating = "Rating must be a number";
     }
 
