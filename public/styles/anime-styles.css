@@ -1,8 +1,11 @@
+.anime, .anime-preview {
+    width: 480px;
+}
+
 .anime-preview {
     position: relative;
     border: 2px solid orange;
     border-radius: 8px;
-    width: 480px;
     height: 80px;
     margin: 12px 0;
 }

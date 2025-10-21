@@ -3,6 +3,8 @@ import Anime from "../models/animeModel.js";
 import Review from "../models/reviewModel.js";
 import originalReviews from "../seed/reviews.js";
 import { error, validateLimit } from "../utils/utils.js";
+import { getAnimeById } from "./animeService.js";
+import { getUserById } from "./userService.js";
 
 export async function getAllReviews(queryString = {}) {
     if (queryString.reviewId) {
@@ -28,18 +30,13 @@ export async function getAllReviewsWithDetails(queryString = {}) {
     if (queryString.reviewId) {
         const review = getReviewById(queryString.reviewId);
         return review;
+    } else if (queryString.userId) {
+        return await getReviewsByUserId(queryString.userId, queryString);
+    } else if (queryString.animeId) {
+        return await getReviewsByAnimeId(queryString.animeId, queryString);
     }
 
     const limit = validateLimit(queryString.limit);
-    const query = {};
-
-    if (queryString.userId) {
-        query.user_id = queryString.userId;
-    }
-
-    if (queryString.animeId) {
-        query.anime_id = queryString.animeId;
-    }
 
     const reviews = await Review.find({}).limit(limit)
         .populate({
@@ -82,6 +79,38 @@ export async function createReview(reviewBody) {
     return review;
 }
 
+export async function createReviewByUsernameTitle(reviewBody) {
+    // Validate body first
+    validateReviewBody(reviewBody);
+
+    // Validate username and anime title
+    const [userDoc, animeDoc] = await Promise.all([User.findOne({ username: reviewBody.username}), Anime.findOne({ title: reviewBody.title })]);
+
+    if (!userDoc && !animeDoc) {
+        throw error("User and Anime not found", 404);
+    } else if (!userDoc) {
+        throw error("User not found", 404);
+    } else if (!animeDoc) {
+        throw error("Anime not found", 404);
+    }
+
+    // Check if review exists
+    const reviewDoc = await Review.findOne({ anime_id: animeDoc._id, user_id: userDoc._id })
+    if (reviewDoc) {
+        throw error("Review already exists", 409);
+    }
+
+    // Create the review
+    const review = await Review.create({
+        anime_id: animeDoc._id,
+        user_id: userDoc._id,
+        comment: reviewBody.comment,
+        rating: reviewBody.rating
+    });
+    
+    return review;
+}
+
 export async function getReviewById(reviewId) {
     const review = await Review.findById(reviewId);
     if (!review) {
@@ -90,15 +119,33 @@ export async function getReviewById(reviewId) {
     return review;
 }
 
+export async function getReviewWithDetailsById(reviewId) {
+    const review = await Review.findById(reviewId)
+        .populate({
+            path: "user_id",
+            select: "username"
+        })
+        .populate({
+            path: "anime_id",
+            select: "title"
+        });
+    if (!review) {
+        throw error({ review: "Review not found" }, 404);
+    }
+    return review;
+}
+
 export async function getReviewsByAnimeId(animeId, queryString) {
     const limit = validateLimit(queryString.limit);
-    const reviews = await Review.find({ anime_id: animeId }).limit(limit);
+    const [anime, reviews] = await Promise.all([getAnimeById(animeId), Review.find({ anime_id: animeId }).limit(limit)]);
+    reviews.animeTitle = anime ? anime.title : "Deleted Anime";
     return reviews;
 }
 
 export async function getReviewsByUserId(userId, queryString) {
     const limit = validateLimit(queryString.limit);
-    const reviews = await Review.find({ user_id: userId }).limit(limit);
+    const [user, reviews] = await Promise.all([getUserById(userId), Review.find({ user_id: userId }).limit(limit)]);
+    reviews.username = user ? user.username : "Deleted User";
     return reviews;
 }
 
@@ -170,7 +217,7 @@ function validateReviewBody(body, create=true) {
         const forbiddenKeys = ["_id", "anime_id", "user_id"];
         forbiddenKeys.forEach(key => {
             if (body[key] != undefined) {
-                keyErrors[key] = `${key} cannot be changed`;
+                body[key] = undefined;
             }
         })
     }

@@ -40,9 +40,12 @@ async function showCreateUser(req, res, next) {
 async function findUserById(req, res, next) {
     try {
         const user = await userService.getUserById(req.params.id);
-        res.render("users/doc", {
+        res.render("doc", {
             pageTitle: `${user.username} | AniReview`,
-            user: user
+            doc: user,
+            docType: "User",
+            route: "users",
+            keys: ["_id", "name", "username", "email", "password", "number_of_reviews"]
         });
     } catch (err) {
         err.action = "Failed to Get User";
@@ -73,18 +76,18 @@ async function deleteUser(req, res, next) {
 }
 
 // GET /users/:id/reviews (Does not work yet must fix)
-// async function findReviewsByUserId(req, res, next) {
-//     try {
-//         const reviews = getAllReviewsWithDetails(req.params.id);
-//         res.render("reviews/index", {
-//             pageTitle: `Review for ${title} | AniReview`,
-//             reviews: reviews
-//         });
-//     } catch (err) {
-//         err.action = "Failed to Get Reviews for User"
-//         next(err);
-//     }
-// }
+async function findReviewsByUserId(req, res, next) {
+    try {
+        const reviews = getAllReviewsWithDetails(req.params.id);
+        res.render("reviews/index", {
+            pageTitle: `Reviews by ${reviews[0].user_id.username} | AniReview`,
+            reviews: reviews
+        });
+    } catch (err) {
+        err.action = "Failed to Get Reviews for User"
+        next(err);
+    }
+}
 
 // GET /user/seed
 async function resetUserData(req, res, next) {
@@ -103,6 +106,7 @@ export default {
     findUserById,
     updateUser,
     deleteUser,
+    reviews: findReviewsByUserId,
     seed: resetUserData,
     create: showCreateUser
 }

@@ -40,9 +40,13 @@ async function showCreateAnime(req, res, next) {
 async function findAnimeById(req, res, next) {
     try {
         const anime = await animeService.getAnimeById(req.params.id);
-        res.render("anime/doc", {
+        anime.genres = anime.genres.join(", ");
+        res.render("doc", {
             pageTitle: `${anime.title} | AniReview`,
-            anime: anime
+            doc: anime,
+            docType: "Anime",
+            route: "anime",
+            keys: ["_id", "title", "status", "genres", "type", "premiered", "episodes", "avg_user_rating"]
         });
     } catch (err) {
         err.action = "Failed to Get Anime";

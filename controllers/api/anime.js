@@ -45,7 +45,7 @@ async function updateAnime(req, res, next) {
 async function deleteAnime(req, res, next) {
     try {
         const anime = await animeService.removeAnime(req.params.id);
-        res.json(anime);
+        res.status(204).json(anime);
     } catch (err) {
         next(err);
     }
@@ -54,6 +54,7 @@ async function deleteAnime(req, res, next) {
 // GET /anime/:id/reviews
 async function findReviewsByAnimeId(req, res, next) {
     try {
+        req.body.anime_id = req.body.params.id;
         const reviews = await getReviewsByAnimeId(req.params.id);
         res.json(reviews);
     } catch (err) {

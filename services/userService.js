@@ -15,7 +15,7 @@ export async function getAllUsers(queryString) {
 }
 
 export async function createUser(userBody) {
-    validateUserBody(userBody);
+    // Validation is handled by the schema
     const user = await User.create({
         name: userBody.name,
         username: userBody.username,
@@ -34,7 +34,10 @@ export async function getUserById(userId) {
 }
 
 export async function modifyUser(userId, userBody) {
-    validateUserBody(userBody, false);
+    // Prevent updating username
+    if (userBody.username != undefined) {
+        userBody.username = undefined;
+    }
     const user = await User.findByIdAndUpdate(userId, userBody, { runValidators: true, new: true });
     if (!user) {
         throw error({ user: "User not found" }, 404);

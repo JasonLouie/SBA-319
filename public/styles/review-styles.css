@@ -1,8 +1,11 @@
+.review, .review-preview {
+    width: 400px;
+}
+
 .review-preview {
     position: relative;
     border: 2px solid lightskyblue;
     border-radius: 8px;
-    width: 400px;
     height: 80px;
     margin: 12px 0;
 }

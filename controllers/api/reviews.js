@@ -44,7 +44,7 @@ async function updateReview(req, res, next) {
 async function deleteReview(req, res, next) {
     try {
         const deletedReview = await reviewService.removeReview(req.params.id);
-        res.json(deletedReview);
+        res.status(204).json(deletedReview);
     } catch (err) {
         next(err);
     }

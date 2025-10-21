@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= pageTitle %></title>
+        <link rel="stylesheet" href="/styles/styles.css" />
+        <link rel="stylesheet" href="/styles/review-styles.css" />
+        <script src="/scripts/script.js" defer></script>
+    </head>
+    <body class="dark-mode">
+        <header>
+            <nav class="align-vert">
+                <a href="/">AniReview</a>
+                <a class="flex" href="/demo/users">Users</a>
+                <a class="flex" href="/demo/anime">Anime</a>
+                <a class="flex" href="/demo/reviews">Reviews</a>
+            </nav>
+        </header>
+        <main class="flex">
+            <div id="content">
+                <div id="<%= route %>-doc" class="flex doc">
+                    <h1 id="action-heading">View <%= docType %></h1>
+                    <form id="form" action="/demo/<%= route %>/<%= doc._id %>?_method=PATCH" method="post">
+                        <% keys.forEach(key => { %>
+                            <label for="<%= key.replace('_', '') %>"><%= key === "_id" ? "Id" : key[0].toUpperCase() + key.substring(1) %></label>
+                            <input type="<%= typeof doc[key] === 'number' ? 'number' : 'text' %>" name="<%= key.replace('_', '') %>" id="<%= key.replace('_', '') %>" value="<%= doc[key] %>" autocomplete="off" disabled>
+                        <% }) %>
+                        <% if (docType === "Review") { %>
+                            <label for="comment">Comment</label>
+                            <textarea type="text" name="comment" id="comment" disabled><%= doc.comment %></textarea>
+                        <% } %>
+                        <div id="form-controls" class="flex">
+                            <a class="control-btn" href="/demo/<%= route %>">Back</a>
+                            <% if (docType != "Review") { %>
+                                <a class="control-btn" href="/demo/reviews?<%= docType.toLowerCase() %>Id=<%= doc._id %>">View Reviews</a>
+                            <% } %>
+                            <a class="control-btn hidden" id="cancel" href="/demo/<%= route %>/<%= doc._id %>">Cancel</a>
+                            <button class="control-btn" type="button" id="edit">Edit</button>
+                            <button class="control-btn" type="submit" id="delete" formaction="/demo/<%= route %>/<%= doc._id %>?_method=DELETE">Delete</button>
+                            <button class="control-btn hidden" type="submit" id="update">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

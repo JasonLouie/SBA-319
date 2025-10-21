@@ -18,7 +18,7 @@
         </header>
         <main class="flex">
             <div class="content">
-                <div class="space-between">
+                <div class="space-between anime">
                     <h1>Anime</h1>
                     <div class="doc-actions">
                         <a href="/demo/anime/create">
@@ -35,32 +35,25 @@
                         </a>
                     </div>
                 </div>
-                <% anime.forEach(a => { %>
-                    <a href="/demo/anime/<%= a._id %>">
-                        <div class="anime-preview">
-                            <img class="anime-icon" src="/images/anime/<%= a._id %>.png"/>
-                            <p class="title field"><%= a.title %></p>
-                            <div class="type-year-rating">
-                                <p class="type"><%= a.type %></p>
-                                <p class="year">Year: <%= a.premiered %></p>
-                                <p class="rating">Rating: <%= a.avg_user_rating || "-" %></p>
-                                <p class="status">Status: <%= a.status %></p>
+                <% if (anime.length === 0) { %>
+                    <h1 class="empty">No anime exist yet</h1>
+                    <p>Press the green button next to Reviews to create one!</p>
+                <% } else { %>
+                    <% anime.forEach(a => { %>
+                        <a href="/demo/anime/<%= a._id %>">
+                            <div class="anime-preview">
+                                <img class="anime-icon" src="/images/anime/<%= a._id %>.png"/>
+                                <p class="title field"><%= a.title %></p>
+                                <div class="type-year-rating">
+                                    <p class="type"><%= a.type %></p>
+                                    <p class="year">Year: <%= a.premiered %></p>
+                                    <p class="rating">Rating: <%= a.avg_user_rating || "-" %></p>
+                                    <p class="status">Status: <%= a.status %></p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                <% }) %>
-                <!-- <a href="/anime/id">
-                    <div class="anime-preview">
-                        <div class="anime-icon"></div>
-                        <p class="title field">title</p>
-                        <div class="type-year-rating">
-                            <p class="type">type</p>
-                            <p class="year">year</p>
-                            <p class="rating">rating</p>
-                            <p class="status">status</p>
-                        </div>
-                    </div>
-                </a> -->
+                        </a>
+                    <% }) %>
+                <% } %>
             </div>
         </main>
     </body>

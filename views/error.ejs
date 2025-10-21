@@ -18,9 +18,13 @@
         <main class="flex">
             <div class="content">
                 <h1><%= failedAction %></h1>
-                <% for (const key in messages) { %>
-                <p><span><%= key %> error: </span><%= messages[key] %></p>
-                <% } %>
+                <% if (typeof messages === "string") {%>
+                    <p><span> error: </span><%= messages %></p>
+                <%} else { %>
+                    <% for (const key in messages) { %>
+                        <p><span><%= key %> error: </span><%= messages[key] %></p>
+                    <% } %>
+                <%}%>
             </div>
         </main>
     </body>

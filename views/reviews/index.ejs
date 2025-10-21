@@ -19,7 +19,7 @@
         </header>
         <main class="flex">
             <div class="content">
-                <div class="space-between">
+                <div class="space-between review">
                     <h1>Reviews</h1>
                     <div class="doc-actions">
                         <a href="/demo/reviews/create">
@@ -36,17 +36,22 @@
                         </a>
                     </div>
                 </div>
-                <% reviews.forEach(r => { %>
-                <a href="/demo/reviews/<%= r._id %>">
-                    <div class="review-preview">
-                        <p class="anime field"><%= r.anime_id.title %></p>
-                        <div class="user-rating">
-                            <p class="user">by: <%= r.user_id.username %></p>
-                            <p class="rating">rating: <%= r.rating %></p>
-                        </div>
-                    </div>
-                </a>
-                <% }) %>
+                <% if (reviews.length === 0) { %>
+                    <h1 class="empty">No reviews exist yet</h1>
+                    <p>Press the green button next to Reviews to create one!</p>
+                <% } else { %>
+                    <% reviews.forEach(r => { %>
+                        <a href="/demo/reviews/<%= r._id %>">
+                            <div class="review-preview">
+                                <p class="anime field"><%= r.anime_id ? r.anime_id.title : "Deleted Anime" %></p>
+                                <div class="user-rating">
+                                    <p class="user">by: <%= r.user_id ? r.user_id.username : "Deleted User" %></p>
+                                    <p class="rating">rating: <%= r.rating %></p>
+                                </div>
+                            </div>
+                        </a>
+                    <% }) %>
+                <% } %>
             </div>
         </main>
     </body>

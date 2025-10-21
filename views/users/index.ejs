@@ -18,7 +18,7 @@
         </header>
         <main class="flex">
             <div class="content">
-                <div class="space-between">
+                <div class="space-between user">
                     <h1>Users</h1>
                     <div class="doc-actions">
                         <a href="/demo/users/create">
@@ -35,15 +35,20 @@
                         </a>
                     </div>
                 </div>
-                <% users.forEach(u => { %>
-                <a href="/demo/users/<%= u._id %>">
-                    <div class="user-preview">
-                        <div class="profile-icon"></div>
-                        <p class="name field"><%= u.name %></p>
-                        <p class="username field"><%= u.username %></p>
-                    </div>
-                </a>
-                <% }) %>
+                <% if (users.length === 0) { %>
+                    <h1 class="empty">No users exist yet</h1>
+                    <p>Press the green button next to Users to create one!</p>
+                <% } else { %>
+                    <% users.forEach(u => { %>
+                        <a href="/demo/users/<%= u._id %>">
+                            <div class="user-preview">
+                                <div class="profile-icon"></div>
+                                <p class="name field"><%= u.name %></p>
+                                <p class="username field"><%= u.username %></p>
+                            </div>
+                        </a>
+                    <% }) %>
+                <% } %>
             </div>
         </main>
     </body>

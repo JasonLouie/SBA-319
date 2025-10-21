@@ -1,8 +1,11 @@
+.user, .user-preview {
+    width: 330px;
+}
+
 .user-preview {
     position: relative;
     border: 2px solid green;
     border-radius: 8px;
-    width: 300px;
     height: 80px;
     margin: 12px 0;
 }

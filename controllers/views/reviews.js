@@ -1,13 +1,17 @@
-import { getAnimeById } from "../../services/animeService.js";
 import * as reviewService from "../../services/reviewService.js";
-import { getUserById } from "../../services/userService.js";
 
 // GET /reviews with optional query strings ?reviewId, ?userId, ?animeId, ?limit
 async function findAllReviews(req, res, next) {
     try {
-        const reviews = await reviewService.getAllReviewsWithDetails();
+        const reviews = await reviewService.getAllReviewsWithDetails(req.query);
+        let titlePrefix = "All Reviews";
+        if (req.query.userId) {
+            titlePrefix = `${reviews.length > 0 ? "" : "No "}Reviews by ${reviews.username}`;
+        } else if (req.query.animeId) {
+            titlePrefix = `${reviews.length > 0 ? "" : "No "}Reviews for ${reviews.animeTitle}`;
+        }
         res.render("reviews/index", {
-            pageTitle: "All Reviews | AniReview",
+            pageTitle: `${titlePrefix} | AniReview`,
             reviews: reviews
         });
     } catch (err) {
@@ -16,11 +20,11 @@ async function findAllReviews(req, res, next) {
     }
 }
 
-// POST /reviews with body
-async function createNewReview(req, res, next) {
+// POST /reviews with body (Not using ids since username and anime title are easier to provide)
+async function newReviewByUsernameTitle(req, res, next) {
     try {
-        const review = await reviewService.createReview(req.body);
-        res.redirect(`/demo/anime/${review._id}`);
+        const review = await reviewService.createReviewByUsernameTitle(req.body);
+        res.redirect(`/demo/reviews/${review._id}`);
     } catch (err) {
         err.action = "Failed to Create Review";
         next(err);
@@ -40,13 +44,15 @@ async function showCreateReview(req, res, next) {
 // GET /reviews/:id
 async function findReviewById(req, res, next) {
     try {
-        const review = await reviewService.getReviewById(req.params.id);
-        const [anime, user] = await Promise.all([getAnimeById(review.anime_id), getUserById(review.user_id)]);
-        res.render("reviews/doc", {
-            pageTitle: `Review for ${anime.title} | AniReview`,
-            review: review,
-            title: anime.title,
-            name: user.name
+        const review = await reviewService.getReviewWithDetailsById(req.params.id);
+        review.title = review.anime_id ? review.anime_id.title : "Deleted Anime";
+        review.username = review.user_id ? review.user_id.username : "Deleted User";
+        res.render("doc", {
+            pageTitle: `Review for ${review.title} | AniReview`,
+            doc: review,
+            docType: "Review",
+            route: "reviews",
+            keys: ["_id", "title", "username", "rating"]
         });
     } catch (err) {
         next(err);
@@ -89,7 +95,7 @@ async function resetReviewData(req, res, next) {
 
 export default {
     findAllReviews,
-    createReview: createNewReview,
+    createReview: newReviewByUsernameTitle,
     findReviewById,
     updateReview,
     deleteReview,

@@ -178,11 +178,16 @@ textarea {
     padding-right: 3px;
 }
 
-#users-doc, #anime-doc, #reviews-doc {
+.doc {
     width: 500px;
 }
+
 #action-heading {
     width: inherit;
     text-align: center;
+    margin: 10px 0;
+}
+
+.empty {
     margin: 10px 0;
 }

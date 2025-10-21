@@ -1,6 +1,6 @@
 import express from "express";
 import userController from "../../controllers/views/users.js";
-import { cleanseModifyUserBody } from "../../utils/utils.js";
+import { cleanseUserBody } from "../../utils/utils.js";
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.get("/reset", userController.seed);
 
 router.route("/:id")
     .get(userController.findUserById)
-    .patch(cleanseModifyUserBody, userController.updateUser)
+    .patch(cleanseUserBody, userController.updateUser)
     .delete(userController.deleteUser);
 
 // router.route("/:id/reviews")
