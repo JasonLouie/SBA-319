@@ -1,7 +1,6 @@
 import Anime from "../models/animeModel.js";
-import Counter from "../models/counterModel.js";
-import originalAnimes from "../seed/anime.js";
 import { error, validateLimit } from "../utils/utils.js";
+import { removeReviewsByAnimeId } from "./reviewService.js";
 
 export async function getAllAnime(queryString) {
     if (queryString.animeId) {
@@ -51,16 +50,10 @@ export async function removeAnime(animeId) {
     const anime = await Anime.findByIdAndDelete(animeId);
     if (!anime) {
         throw error({ anime: "Anime not found" }, 404);
+    } else {
+        await removeReviewsByAnimeId(animeId);
     }
     return anime;
-}
-
-export async function resetAnimes(req, res, next) {
-    // Use Promise.all to run counter reset and deleting all anime simulataneously
-    // Reset the counter to amount of anime seed data so preceding anime will correctly auto increment
-    await Promise.all([Anime.deleteMany({}), Counter.reset(originalAnimes.length)]);
-    const resultInsert = await Anime.insertMany(originalAnimes);
-    return resultInsert;
 }
 
 function validateAnimeBody(body) {

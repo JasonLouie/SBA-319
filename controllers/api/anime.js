@@ -73,16 +73,6 @@ async function createNewReview(req, res, next) {
     }
 }
 
-// GET /anime/seed
-async function resetAnimeData(req, res, next) {
-    try {
-        const results = await animeService.resetAnimes();
-        res.json(results);
-    } catch (err) {
-        next(err);
-    }
-}
-
 export default {
     findAllAnimes,
     createAnime: createNewAnime,
@@ -90,6 +80,5 @@ export default {
     updateAnime,
     deleteAnime,
     animeReviews: findReviewsByAnimeId,
-    createReview: createNewReview,
-    seed: resetAnimeData
+    createReview: createNewReview
 }

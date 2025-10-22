@@ -7,8 +7,6 @@ router.route("/")
     .get(userController.findAllUsers)
     .post(userController.createUser);
 
-router.get("/seed", userController.seed);
-
 router.route("/:id")
     .get(userController.findUserById)
     .patch(userController.updateUser)

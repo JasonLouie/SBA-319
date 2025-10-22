@@ -3,16 +3,16 @@ import * as reviewService from "../../services/reviewService.js";
 // GET /reviews with optional query strings ?reviewId, ?userId, ?animeId, ?limit
 async function findAllReviews(req, res, next) {
     try {
-        const reviews = await reviewService.getAllReviewsWithDetails(req.query);
+        const results = await reviewService.getAllReviewsWithDetails(req.query);
         let titlePrefix = "All Reviews";
         if (req.query.userId) {
-            titlePrefix = `${reviews.length > 0 ? "" : "No "}Reviews by ${reviews.username}`;
+            titlePrefix = `${results.reviews.length > 0 ? "" : "No "}Reviews by ${results.username}`;
         } else if (req.query.animeId) {
-            titlePrefix = `${reviews.length > 0 ? "" : "No "}Reviews for ${reviews.animeTitle}`;
+            titlePrefix = `${results.reviews.length > 0 ? "" : "No "}Reviews for ${results.title}`;
         }
         res.render("reviews/index", {
             pageTitle: `${titlePrefix} | AniReview`,
-            reviews: reviews
+            reviews: Array.isArray(results) ? results : results.reviews
         });
     } catch (err) {
         err.action = "Failed to Get All Reviews";
@@ -81,24 +81,11 @@ async function deleteReview(req, res, next) {
     }
 }
 
-// GET /reviews/seed
-async function resetReviewData(req, res, next) {
-    try {
-        await reviewService.resetReviews();
-        res.redirect("/demo/reviews");
-    } catch (err) {
-        console.log(err);
-        err.action = "Failed to Reset Review";
-        next(err);
-    }
-}
-
 export default {
     findAllReviews,
     createReview: newReviewByUsernameTitle,
     findReviewById,
     updateReview,
     deleteReview,
-    seed: resetReviewData,
     create: showCreateReview
 }

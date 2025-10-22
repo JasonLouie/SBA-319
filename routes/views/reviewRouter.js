@@ -8,7 +8,6 @@ router.route("/")
     .post(cleanseReviewBody, reviewController.createReview);
 
 router.get("/create", reviewController.create);
-router.get("/reset", reviewController.seed);
 
 router.route("/:id")
     .get(reviewController.findReviewById)

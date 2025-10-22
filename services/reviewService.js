@@ -1,7 +1,6 @@
 import User from "../models/userModel.js";
 import Anime from "../models/animeModel.js";
 import Review from "../models/reviewModel.js";
-import originalReviews from "../seed/reviews.js";
 import { error, validateLimit } from "../utils/utils.js";
 import { getAnimeById } from "./animeService.js";
 import { getUserById } from "./userService.js";
@@ -38,7 +37,8 @@ export async function getAllReviewsWithDetails(queryString = {}) {
 
     const limit = validateLimit(queryString.limit);
 
-    const reviews = await Review.find({}).limit(limit)
+    const reviews = await Review.find({})
+        .limit(limit)
         .populate({
             path: "user_id",
             select: "username"
@@ -137,16 +137,28 @@ export async function getReviewWithDetailsById(reviewId) {
 
 export async function getReviewsByAnimeId(animeId, queryString) {
     const limit = validateLimit(queryString.limit);
-    const [anime, reviews] = await Promise.all([getAnimeById(animeId), Review.find({ anime_id: animeId }).limit(limit)]);
-    reviews.animeTitle = anime ? anime.title : "Deleted Anime";
-    return reviews;
+    const [anime, reviews] = await Promise.all([getAnimeById(animeId), Review.find({ anime_id: animeId }).limit(limit).populate({
+        path: "user_id",
+        select: "username"
+    })
+    .populate({
+        path: "anime_id",
+        select: "title"
+    })]);
+    return {reviews: reviews, title: anime.title};
 }
 
 export async function getReviewsByUserId(userId, queryString) {
     const limit = validateLimit(queryString.limit);
-    const [user, reviews] = await Promise.all([getUserById(userId), Review.find({ user_id: userId }).limit(limit)]);
-    reviews.username = user ? user.username : "Deleted User";
-    return reviews;
+    const [user, reviews] = await Promise.all([getUserById(userId), Review.find({ user_id: userId }).limit(limit).populate({
+        path: "user_id",
+        select: "username"
+    })
+    .populate({
+        path: "anime_id",
+        select: "title"
+    })]);
+    return {reviews: reviews, username: user.username};
 }
 
 export async function modifyReview(reviewId, reviewBody) {
@@ -166,10 +178,14 @@ export async function removeReview(reviewId) {
     return review;
 }
 
-export async function resetReviews() {
-    await Review.deleteMany({});
-    const resultInsert = await Review.insertMany(originalReviews);
-    return resultInsert;
+export async function removeReviewsByUserId(userId) {
+    const reviews = await Review.deleteMany({user_id: userId});
+    return reviews;
+}
+
+export async function removeReviewsByAnimeId(animeId) {
+    const reviews = await Review.deleteMany({anime_id: animeId});
+    return reviews;
 }
 
 export async function getReviewsByType(type, queryString) {

@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%= pageTitle %></title>
+        <link rel="icon" type="image/png" href="/images/anime/anime.png">
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/anime-styles.css" />
     </head>
@@ -27,10 +28,10 @@
                                 <p>Create Anime</p>
                             </div>
                         </a>
-                        <a href="/demo/anime/reset">
+                        <a href="/demo/reset">
                             <div id="remove-doc" class="align-vert">
                                 <p>-</p>
-                                <p>Reset Anime</p>
+                                <p>Reset All Data</p>
                             </div>
                         </a>
                     </div>
@@ -42,7 +43,7 @@
                     <% anime.forEach(a => { %>
                         <a href="/demo/anime/<%= a._id %>">
                             <div class="anime-preview">
-                                <img class="anime-icon" src="/images/anime/<%= a._id %>.png"/>
+                                <img class="anime-icon" src="/images/anime/<%= a._id > 8 ? 'anime' : a._id %>.png"/>
                                 <p class="title field"><%= a.title %></p>
                                 <div class="type-year-rating">
                                     <p class="type"><%= a.type %></p>

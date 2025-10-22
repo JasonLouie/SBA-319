@@ -50,16 +50,6 @@ async function deleteReview(req, res, next) {
     }
 }
 
-// GET /reviews/seed
-async function resetReviewData(req, res, next) {
-    try {
-        const reviews = await reviewService.resetReviews();
-        res.json(reviews);
-    } catch (err) {
-        next(err);
-    }
-}
-
 // GET /reviews/rating/:type (type as positive, negative, decent)
 async function findReviewsByType(req, res, next) {
     try {
@@ -76,6 +66,5 @@ export default {
     findReviewById,
     updateReview,
     deleteReview,
-    findReviewsByType,
-    seed: resetReviewData
+    findReviewsByType
 }

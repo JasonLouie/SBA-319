@@ -8,16 +8,10 @@ router.route("/")
     .post(cleanseAnimeBody, animeController.createAnime);
 
 router.get("/create", animeController.create);
-router.get("/reset", animeController.seed);
-
-// router.get("/popular", animeController.popular);
 
 router.route("/:id")
     .get(animeController.findAnimeById)
     .patch(cleanseAnimeBody, animeController.updateAnime)
     .delete(animeController.deleteAnime);
-
-// router.route("/:id/reviews")
-//     .get(animeController.animeReviews)
 
 export default router;

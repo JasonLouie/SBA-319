@@ -9,14 +9,10 @@ router.route("/")
     .post(userController.createUser);
 
 router.get("/create", userController.create)
-router.get("/reset", userController.seed);
 
 router.route("/:id")
     .get(userController.findUserById)
     .patch(cleanseUserBody, userController.updateUser)
     .delete(userController.deleteUser);
-
-// router.route("/:id/reviews")
-//     .get(userController.userReviews)
 
 export default router;

@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%= pageTitle %></title>
+        <link rel="icon" type="image/png" href="/images/anime/anime.png">
         <link rel="stylesheet" href="/styles/styles.css" />
         <link rel="stylesheet" href="/styles/review-styles.css" />
         <script src="/scripts/script.js" defer></script>
@@ -29,6 +30,12 @@
                         <% if (docType === "Review") { %>
                             <label for="comment">Comment</label>
                             <textarea type="text" name="comment" id="comment" disabled><%= doc.comment %></textarea>
+                        <% } else if (docType === "User") { %>
+                            <label for="review_count">Number of Reviews</label>
+                            <input type="number" name="review_count" id="review_count" disabled value="<%= doc.number_of_reviews %>">
+                        <% } else { %>
+                            <label for="average_rating">Average User Rating</label>
+                            <input type="text" name="average_rating" id="average_rating" disabled value="<%= doc.avg_user_rating || '-' %>">
                         <% } %>
                         <div id="form-controls" class="flex">
                             <a class="control-btn" href="/demo/<%= route %>">Back</a>

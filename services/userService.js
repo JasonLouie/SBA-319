@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
-import originalUsers from "../seed/users.js";
 import { error, validateLimit } from "../utils/utils.js";
+import { removeReviewsByUserId } from "./reviewService.js";
 
 export async function getAllUsers(queryString) {
     if (queryString.userId) {
@@ -49,24 +49,8 @@ export async function removeUser(userId) {
     const user = await User.findByIdAndDelete(userId);
     if (!user) {
         throw error({ user: "User not found" }, 404);
+    } else {
+        await removeReviewsByUserId(userId);
     }
     return user;
-}
-
-export async function resetUsers() {
-    await User.deleteMany({});
-    const resultInsert = await User.insertMany(originalUsers);
-    return resultInsert;
-}
-
-function validateUserBody(body, create = true) {
-    const keyErrors = {};
-
-    if (!create && body.username != undefined) {
-        keyErrors.username = "Username cannot be changed";
-    }
-
-    if (Object.keys(keyErrors).length > 0) {
-        throw error(keyErrors);
-    }
 }

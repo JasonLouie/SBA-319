@@ -73,16 +73,6 @@ async function createNewReview(req, res, next) {
     }
 }
 
-// GET /users/seed
-async function resetUserData(req, res, next) {
-    try {
-        const results = await userService.resetUsers();
-        res.json(results);
-    } catch (err) {
-        next(err);
-    }
-}
-
 export default {
     findAllUsers,
     createUser: createNewUser,
@@ -90,6 +80,5 @@ export default {
     updateUser,
     deleteUser,
     userReviews: findReviewsByUser,
-    createReview: createNewReview,
-    seed: resetUserData
+    createReview: createNewReview
 }

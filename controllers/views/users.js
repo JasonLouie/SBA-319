@@ -45,7 +45,7 @@ async function findUserById(req, res, next) {
             doc: user,
             docType: "User",
             route: "users",
-            keys: ["_id", "name", "username", "email", "password", "number_of_reviews"]
+            keys: ["_id", "name", "username", "email", "password"]
         });
     } catch (err) {
         err.action = "Failed to Get User";
@@ -89,17 +89,6 @@ async function findReviewsByUserId(req, res, next) {
     }
 }
 
-// GET /user/seed
-async function resetUserData(req, res, next) {
-    try {
-        await userService.resetUsers();
-        res.redirect("/demo/users");
-    } catch (err) {
-        err.action = "Failed to Reset User";
-        next(err);
-    }
-}
-
 export default {
     findAllUsers,
     createUser: createNewUser,
@@ -107,6 +96,5 @@ export default {
     updateUser,
     deleteUser,
     reviews: findReviewsByUserId,
-    seed: resetUserData,
     create: showCreateUser
 }

@@ -6,8 +6,6 @@ router.route("/")
     .get(animeController.findAllAnimes)
     .post(animeController.createAnime);
 
-router.get("/seed", animeController.seed);
-
 // router.get("/popular", animeController.popular);
 
 router.route("/:id")

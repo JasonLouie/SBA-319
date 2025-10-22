@@ -6,8 +6,6 @@ router.route("/")
     .get(reviewController.findAllReviews)
     .post(reviewController.createReview);
 
-router.get("/seed", reviewController.seed);
-
 // Get reviews that are at least 7/10 - positive
 // 4/10 to 6/10 - decent
 // below 4/10 - negative

@@ -46,7 +46,7 @@ async function findAnimeById(req, res, next) {
             doc: anime,
             docType: "Anime",
             route: "anime",
-            keys: ["_id", "title", "status", "genres", "type", "premiered", "episodes", "avg_user_rating"]
+            keys: ["_id", "title", "status", "genres", "type", "premiered", "episodes"]
         });
     } catch (err) {
         err.action = "Failed to Get Anime";
@@ -76,37 +76,11 @@ async function deleteAnime(req, res, next) {
     }
 }
 
-// GET /anime/:id/reviews (Does not work yet must fix)
-// async function findReviewsByAnimeId(req, res, next) {
-//     try {
-//         const reviews = getAllReviewsWithDetails(req.params.id);
-//         res.render("reviews/index", {
-//             pageTitle: `Review for ${title} | AniReview`,
-//             reviews: reviews,
-//         });
-//     } catch (err) {
-//         err.action = "Failed to Get Reviews for Anime"
-//         next(err);
-//     }
-// }
-
-// GET /anime/seed
-async function resetAnimeData(req, res, next) {
-    try {
-        await animeService.resetAnimes();
-        res.redirect("/demo/anime");
-    } catch (err) {
-        err.action = "Failed to Reset Anime";
-        next(err);
-    }
-}
-
 export default {
     findAllAnimes,
     createAnime: createNewAnime,
     findAnimeById,
     updateAnime,
     deleteAnime,
-    seed: resetAnimeData,
     create: showCreateAnime
 }

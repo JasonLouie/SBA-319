@@ -5,10 +5,12 @@ import connectDB from "./db/conn.js";
 import usersApiRouter from "./routes/api/userRouter.js";
 import animeApiRouter from "./routes/api/animeRouter.js";
 import reviewsApiRouter from "./routes/api/reviewRouter.js";
+import resetApiRouter from "./routes/api/resetRouter.js"
 
 import usersViewsRouter from "./routes/views/userRouter.js";
 import animeViewsRouter from "./routes/views/animeRouter.js";
 import reviewsViewsRouter from "./routes/views/reviewRouter.js";
+import resetViewsRouter from "./routes/views/resetRouter.js";
 
 import { timeOptions } from "./utils/utils.js";
 
@@ -35,10 +37,12 @@ app.get("/", (req, res) => {
 app.use("/api/users", usersApiRouter);
 app.use("/api/anime", animeApiRouter);
 app.use("/api/reviews", reviewsApiRouter);
+app.use("/api/reset", resetApiRouter);
 
 app.use("/demo/users", usersViewsRouter);
 app.use("/demo/anime", animeViewsRouter);
 app.use("/demo/reviews", reviewsViewsRouter);
+app.use("/demo/reset", resetViewsRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
