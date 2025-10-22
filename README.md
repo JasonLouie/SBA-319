@@ -106,7 +106,7 @@ The base url for the API endpoint is `localhost:3000/api`. To reset ALL data, us
 
 ## Endpoints (Demo)
 
-The base url for the demo endpoint is `localhost:3000/demo`, but each endpoint below will include the `/demo` prefix. The same validation logic from the previous section applies to the respective document type. Errors are rendered. The title shows the error type and the content in the main body of the page lists out all errors with key: value (key being the field or model with the error and the value being the error). To reset ALL data, use the endpoint `/demo/reset`. If the length of the initial and created static data for users, review, and anime are equal, redirect to the page the reset was initiated. Otherwise, code is 400 (one of the entries did not get inserted) and this is displayed in `error.ejs`.
+The base url for the demo endpoint is `localhost:3000/demo`, but each endpoint below will include the `/demo` prefix. The same validation logic from the previous section applies to the respective document type. Errors are rendered. The title shows the error type and the content in the main body of the page lists out all errors with key: value (key being the field or model with the error and the value being the error). To reset ALL data, use the endpoint `/demo/reset`. If the length of the initial and created static data for users, review, and anime are equal, redirect to the page the reset was initiated (or if this isn't accessible, then the documentation page at `localhost:3000`). Otherwise, code is 400 (one of the entries did not get inserted) and this is displayed in `error.ejs`.
 
 | Method | Endpoint | Description & Response |
 | --- | ------ | ------ | ----- |
